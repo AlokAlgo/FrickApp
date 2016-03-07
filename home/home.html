@@ -1,0 +1,159 @@
+<div class="home">
+
+<table>
+<tr>
+<td>
+<md-menu-bar>
+ <md-menu>
+   <button ng-click="$mdOpenMenu()">
+     Sample Menu
+   </button>
+   <md-menu-content>
+     <md-menu-item type="checkbox" ng-model="settings.allowChanges">Allow changes</md-menu-item>
+     <md-menu-divider></md-menu-divider>
+     <md-menu-item type="radio" ng-model="settings.mode" ng-value="1">Mode 1</md-menu-item>
+     <md-menu-item type="radio" ng-model="settings.mode" ng-value="1">Mode 2</md-menu-item>
+     <md-menu-item type="radio" ng-model="settings.mode" ng-value="1">Mode 3</md-menu-item>
+   </md-menu-content>
+ </md-menu>
+</md-menu-bar>
+</td>
+<td>
+  <md-card><img />
+	</md-card>
+</td>		
+<td>
+<md-card>
+	<img src="{{auth.profile.picture}}" />
+	</md-card>
+	</td>
+	<td>
+	<md-card>
+    <md-card-content>
+     
+      <p> Selected Match is : {{selectedMatch.name}} </p>
+      <select ng-model="selectedMatch" ng-options="match.name for match in matches">
+      </select>
+    </md-card-content>
+	</md-card>
+	 
+	</td>
+	
+	</tr>
+</table>
+Make Your Bet and Publish
+<br>
+<table>
+   <tr>
+  
+		
+		 <td>
+		
+			<md-autocomplete md-selected-item="selectedSubject" md-search-text="searchText" md-items="bet in selectedMatch.metadata" md-item-text="bet.name">
+			<span md-highlight-text="searchText">{{bet.name}}</span>
+			</md-autocomplete>
+		</td>
+
+		<td>
+		<md-autocomplete md-selected-item="selectedTake" md-search-text="searchText1" md-items="take in flags" md-item-text="take.text">
+			<span md-highlight-text="searchText">{{take.text}}</span>
+			</md-autocomplete>
+		</td>
+		<td>
+		<md-autocomplete md-selected-item="selectedCTopic" md-search-text="searchText2" md-items="take in selectedSubject.topics" md-item-text="take">
+			<span md-highlight-text="searchText">{{take}}</span>
+			</md-autocomplete>
+		</td>
+		
+		<td>
+		<md-input-container>
+		<label>Runs</label>
+		<textarea ng-model="val"></textarea>
+		</md-input-container>
+		</td>
+		<td>
+		<form class="form-horizontal" role="form" ng-submit="addRow()">
+		<div class="form-group">								
+		<div style="padding-left:110px">
+			<md-button type="submit" value="Publish" class="md-raised">Publish
+			</md-button>
+		</div>
+		</div>
+		
+		</form>
+		</td>
+
+</td>
+</tr>
+</table>
+
+<md-list>
+  <md-list-item class="md-2-line" ng-repeat="bet in bets">
+    <md-checkbox ng-model="item.done"></md-checkbox>
+      <h3>{{bet.subject}} ---------- {{bet.topicname}}---------- {{bet.optimistic}}---------- {{bet.val}}</h3>
+  </md-list-item>
+</md-list>
+ <md-content layout-padding>
+    <md-grid-list
+        md-cols-gt-md="5" md-cols-sm="3" md-cols-md="8"
+        md-row-height-gt-md="1:1" md-row-height="4:3"hh
+        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px">
+      <md-grid-tile
+          ng-repeat="bet in bets">
+         
+		  {{bet.subject}} {{bet.optimistic}} {{bet.topicname}} {{bet.val}}
+      </md-grid-tile>
+    </md-grid-list>
+  </md-content> 
+  
+ <table>
+  <tr>
+<td>
+<table class="table" style = "height:400px;
+	width:600px;">
+	<tr>
+		<th>Subject
+		</th>
+		<th>Topic
+		</th>
+		<th>Position
+		</th>
+		<th>Value
+		</th>
+	</tr>
+	<tr  valign="top" ng-repeat="bet in bets">
+		<td>{{bet.subject}}
+		</td>
+		<td>{{bet.topicname}}
+		</td>
+		<td>{{bet.optimistic}}
+		</td>
+		<td>{{bet.val}}
+		</td>
+	</tr>
+</table>
+</td>	
+ <td >
+<md-list style="position:fixed;
+			left:700px;right:10px;bottom:5px;height:40px;width:425px;border:1px solid #000;">
+  <md-list-item class="md-2-line" ng-repeat="message in messages">
+      <h3>{{message}}</h3>
+  </md-list-item>
+</md-list>
+			<form ng-submit="submit()">
+			<input type="text" ng-model="text" name="text" style="position:fixed;
+			left:700px;right:10px;bottom:5px;height:40px;width:425px;border:1px solid #000;" />
+  <input type="submit" id="submit" value="Submit" style="position:fixed;
+			left:1120px;
+    right:0px;
+	bottom:5px;
+	height:40px;
+	width:80px;
+    border:1px solid #000;"/>
+</form>
+
+</div>
+</td>
+</tr>
+</table>
+</div>

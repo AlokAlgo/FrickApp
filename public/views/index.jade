@@ -1,0 +1,60 @@
+extends layout
+
+block content
+    script(src="https://cdn.auth0.com/js/lock-8.1.1.js")
+    script(src="/socket.io/socket.io.js")
+    script(src="http://code.jquery.com/jquery-1.11.3.js")
+        
+    div#chat
+        ul#messages
+            form(action="")
+                input(id="m" autocomplete="off")
+                button.btn Send
+
+    script.
+        var userProfile;
+        var userToken;
+        var lock = new Auth0Lock('#{env.AUTH0_CLIENT_ID}', '#{env.AUTH0_DOMAIN}');
+        var hash = lock.parseHash();
+
+        if (hash) {
+            if (hash.error) {
+                console.log("There was an error logging in", hash.error);
+            }
+            else {
+                alert('coming after authentication');
+                lock.getProfile(hash.id_token, function (err, profile) {
+                    if (err) {
+                        console.log('Cannot get user', err);
+                        return;
+                    }
+                    console.log('connected and authenticated');
+                    userProfile = profile;
+                    localStorage.setItem('userToken', hash.id_token);
+                    userToken = hash.id_token;
+                    openChat();
+                });
+            }
+        } 
+        else { lock.show(); }
+        function openChat() {
+        alert('coming after authentication in open chat' + userToken);
+            var socket = io();
+            alert('coming after authentication in open chat 1' + userToken);
+            socket.on('connect', function () {
+                socket.on('authenticated', function () {
+                    $scope.form.submit(function (event) {
+                        socket.emit('chat message',userProfile.name + ': ' + $('#m').val());
+                        $('#m').val('');
+                        return false;
+                    });
+                    socket.on('chat message', function (msg) {
+                        console.log("msg");
+                        $('#messages').append($('<li>').text(msg));
+                    });
+                }).emit('authenticate', {token: userToken}); // send the jwt
+            })
+        };
+
+
+

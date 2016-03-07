@@ -1,0 +1,71 @@
+// server.js
+
+// modules =================================================
+var express        = require('express');
+var app            = express();
+var bodyParser     = require('body-parser');
+var methodOverride = require('method-override');
+
+// configuration ===========================================
+    
+// config files
+var db = require('./config/db');
+
+// set our port
+var port = process.env.PORT || 8080; 
+
+// connect to our mongoDB database 
+// (uncomment after you enter in your own credentials in config/db.js)
+// mongoose.connect(db.url); 
+
+// get all data/stuff of the body (POST) parameters
+// parse application/json 
+app.use(bodyParser.json()); 
+
+// parse application/vnd.api+json as json
+app.use(bodyParser.json({ type: 'application/vnd.api+json' })); 
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true })); 
+
+// override with the X-HTTP-Method-Override header in the request. simulate DELETE/PUT
+app.use(methodOverride('X-HTTP-Method-Override')); 
+
+// set the static files location /public/img will be /img for users
+app.use(express.static(__dirname + '/public'));
+// routes ==================================================
+app.get('/', function(req, res){
+  res.send('hello world');
+});
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/test');
+//--------------User Routes---------------------------------------
+var moduleRouter = require('./modelroutes');
+moduleRouter.load(app,'/api','match');
+moduleRouter.load(app,'/api','user');
+//moduleRouter.load(app,'/api','match');
+moduleRouter.load(app,'/api','event');
+moduleRouter.load(app,'/api','batroom');
+moduleRouter.load(app,'/api','overroom');
+ app.get('*', function(req, res) {
+            res.sendfile('./public/views/index.html'); // load our public/index.html file
+        });
+
+		//app.get('/api/users',userapi.list_user) ;
+		//app.post('/api/users/signup', userapi.post_user);
+		//app.delete('/api/users/user/:user_id', userapi.delete_user);
+		//app.put('/api/users/user/:user_id', userapi.update_user);
+		//app.get('/api/users/user/:user_id', userapi.get_single_user);
+//End User Routes----------------------		
+// start app ===============================================
+// startup our app at http://localhost:8080
+//--------------Match Routes---------------------------------------
+//-------End Match Routes----------------------
+
+app.listen(port);               
+
+// shoutout to the user                     
+console.log('Magic happens on port ' + port);
+
+// expose app           
+exports = module.exports = app;                         
