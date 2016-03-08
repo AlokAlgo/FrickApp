@@ -12,7 +12,7 @@ controller( 'HomeCtrl', function HomeController( $scope, auth, $http, $location,
   store.set('token', auth.idToken);
   $scope.getUser = function() 
   {
-		var url = "http://'+serverIp+':3001/login";
+		var url = 'http://'+ serverIp + ':3001/login';
 		var token = store.get('token');
 		console.log(token);
 		var data = 
