@@ -8,7 +8,7 @@ const router = express.Router();
 app.use(router);
 var jwt  = require('jsonwebtoken');
 var auth = require('./auth.js');
-router.use(bodyParser.json());
+app.use(bodyParser.json());
 router.use(methodOverride());
 
 
@@ -56,7 +56,7 @@ router.use(function(req, res, next) {
 	});*/
  
 
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://root:tour@localhost/test');
 app.post('/login', auth.login);
 var Match = require('./models/match');
 var User = require('./models/user');

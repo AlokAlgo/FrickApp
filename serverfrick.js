@@ -5,11 +5,10 @@ const redis = require('redis');
 var http = require('http').Server(app);
 var jwt  = require('jsonwebtoken');
 var jwtdecode  = require('jwt-decode');
-
 var io = require('socket.io')(http);
 var socketioJwt = require('socketio-jwt');
 var dotenv = require('dotenv');
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://root:tour@localhost/test');
 var path = require('path');
 var bodyParser = require('body-parser');
 var User = require('./models/user');
