@@ -5,7 +5,7 @@ angular.module( 'frickapp.home', [
   
 ]).
 controller( 'HomeCtrl', function HomeController( $scope, auth, $http, $location, store ) {
-  $scope.serverIp = '104.196.12.45'
+  $scope.serverIp = 'localhost'
   $scope.auth = auth ;
   $scope.messages= [];
   $scope.flags = [{"text": "Will"}, {"text": "Will not"}];
@@ -29,7 +29,7 @@ $scope.getUser();
  $scope.submit = function(event) {
 	 console.log('submit');
 	 var d = new Date();
-	 $scope.socket.emit('chat message', auth.profile.name + ":"+ d + ":" + $scope.text ); 
+	 $scope.socket.emit('chat message', auth.profile.name +d.getUTCMilliseconds()+ $scope.text ); 
 	 return false;
   }
  // var messages = ['nothing'];	
@@ -99,8 +99,8 @@ var data =
 				match_id : $scope.selectedMatch._id,
 				create_user_id : $scope.userId,
 				topicname : $scope.Topic,
-				subject : $scope.Subject,
-				optimistic : $scope.position,
+				subject : $scope.selectedSubject,
+				optimistic : $scope.selectedTake == 'Will' ? true : false,
 				val : $scope.val,
 				coinsgive : "10"
             });
