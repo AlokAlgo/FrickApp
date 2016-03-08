@@ -99,8 +99,8 @@ var data =
 				match_id : $scope.selectedMatch._id,
 				create_user_id : $scope.userId,
 				topicname : $scope.Topic,
-				subject : $scope.selectedSubject,
-				optimistic : $scope.selectedTake == 'Will' ? true : false,
+				subject : $scope.selectedSubject.name,
+				optimistic : $scope.selectedTake.text == 'Will' ? true : false,
 				val : $scope.val,
 				coinsgive : "10"
             });
