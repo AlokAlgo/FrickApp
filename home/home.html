@@ -74,7 +74,7 @@
       <md-grid-tile
           ng-repeat="bet in bets">
          
-		  {{bet.subject}} {{bet.optimistic}} {{bet.topicname}} {{bet.val}}
+		  {{bet.subject}} {{bet.optimistic ? 'Will' : 'Will Not'}} {{bet.topicname}} {{bet.val}}
       </md-grid-tile>
     </md-grid-list>
 	</md-content>
