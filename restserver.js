@@ -8,7 +8,7 @@ const router = express.Router();
 app.use(router);
 var jwt  = require('jsonwebtoken');
 var auth = require('./auth.js');
-app.use(bodyParser.json());
+router.use(bodyParser.json());
 router.use(methodOverride());
 
 
