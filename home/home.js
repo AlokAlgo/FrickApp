@@ -98,7 +98,7 @@ var data =
             JSON.stringify({
 				match_id : $scope.selectedMatch._id,
 				create_user_id : $scope.userId,
-				topicname : $scope.Topic,
+				topicname : $scope.selectedTopic,
 				subject : $scope.selectedSubject.name,
 				optimistic : $scope.selectedTake.text == 'Will' ? true : false,
 				val : $scope.val,
