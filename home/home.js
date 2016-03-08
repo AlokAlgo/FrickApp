@@ -5,13 +5,14 @@ angular.module( 'frickapp.home', [
   
 ]).
 controller( 'HomeCtrl', function HomeController( $scope, auth, $http, $location, store ) {
+  $scope.serverIp = '104.196.12.45'
   $scope.auth = auth ;
   $scope.messages= [];
   $scope.flags = [{"text": "Will"}, {"text": "Will not"}];
   store.set('token', auth.idToken);
   $scope.getUser = function() 
   {
-		var url = "http://localhost:3001/login";
+		var url = "http://'+serverIp+':3001/login";
 		var token = store.get('token');
 		console.log(token);
 		var data = 
@@ -34,7 +35,7 @@ $scope.getUser();
  // var messages = ['nothing'];	
   
   if (!$scope.socket) {
-  var socket = io.connect('http://localhost:3001');
+  var socket = io.connect('http://'+serverIp+':3001');
   $scope.socket = socket;
   }
   
@@ -62,7 +63,7 @@ $scope.matches = [];
 
 $scope.populateBets = function() {
 		$scope.bets = [];
-		var url1 = 'http://localhost:3002/api/v1/Toproom';
+		var url1 = 'http://'+serverIp+':3002/api/v1/Toproom';
         $http.get(url1).success(
             function(data, status, headers, config){
                 $scope.bets = data ;// play here
@@ -76,7 +77,7 @@ $scope.populateBets = function() {
 	  
 $scope.populateMatches = function() {
 		$scope.matches = [];
-		var url = 'http://localhost:3002/api/v1/Match';
+		var url = 'http://'+serverIp+':3002/api/v1/Match';
          $http.get(url).success(
             function(data, status, headers, config){
 				alert(data +status);
@@ -92,7 +93,7 @@ $scope.populateMatches = function() {
 
  
 $scope.addRow = function(){		
-var url = "http://localhost:3002/api/v1/Toproom";
+var url = 'http://'+serverIp+':3002/api/v1/Toproom';
 var data = 
             JSON.stringify({
 				match_id : $scope.selectedMatch._id,
