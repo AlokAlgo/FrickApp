@@ -5,7 +5,7 @@ angular.module( 'frickapp.home', [
   
 ]).
 controller( 'HomeCtrl', function HomeController( $scope, auth, $http, $location, store ) {
-  $scope.serverIp = 'localhost'
+  $scope.serverIp = '104.196.96.128';
   $scope.auth = auth ;
   $scope.messages= [];
   $scope.flags = [{"text": "Will"}, {"text": "Will not"}];
