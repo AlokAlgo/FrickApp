@@ -14,7 +14,7 @@
 </md-menu-bar>
  
 <md-input-container>
-  <md-select ng-model="selectedMatch" placeholder="Select a Match">
+  <md-select ng-model="selectedMatch" ng-change="populateSuggestions()" placeholder="Select a Match">
     <md-option ng-value="match" ng-repeat="match in  matches">{{ match.name }}</md-option>
   </md-select>
 </md-input-container>
@@ -22,8 +22,11 @@
 	<img src="{{auth.profile.picture}}" />
 </md-card>
 </div>
-<md-label>Make Your Bet</md-label>
-	<div layout="flex">
+	<div layout="column">
+	<md-autocomplete  md-selected-item="selectedSuggestion" md-search-text="searchText" md-items="suggestion in getMatches(searchText)" md-item-text="suggestion.text" placeholder="Make your bet,  First select a Match and then start typing, Or you can pick a bet from the bets shown below">
+			<span md-highlight-text="searchText">{{suggestion.text}}</span>
+			</md-autocomplete>
+	<!--
 		<md-autocomplete md-selected-item="selectedSubject" md-search-text="searchText" md-items="bet in selectedMatch.metadata" md-item-text="bet.name">
 			<span md-highlight-text="searchText">{{bet.name}}</span>
 			</md-autocomplete>
@@ -36,8 +39,9 @@
 		<md-input-container>
 		<label>VAl</label>
 		<textarea ng-model="val"></textarea>
-</md-input-container>
-		<form class="form-horizontal" role="form" ng-submit="addRow()">
+		</md-input-container> -->
+		
+		<form class="form-horizontal" role="form" ng-submit="addRow(searchText)">
 		<div class="form-group">								
 		<div style="padding-left:10px">
 			<md-button type="submit" value="Publish" class="md-raised">Publish
@@ -47,11 +51,9 @@
 		
 		</form>
 </div>
-<md-content >  
 
-</md-content>
-<div layout="row">
-
+<div layout="flex" >
+<!--  Chat window removing for now will be introduced again thr menu options
 <md-content layout="column">
 <form ng-submit="submit()">
 			<input type="text" ng-model="text" name="text" style="height:40px;width:300px;" />
@@ -65,12 +67,12 @@
       <h3>{{message}}</h3>
   </md-list-item>
 </md-list>
-</md-content>
-<md-content>  
-    <md-grid-list style="height:350px;width:500px;"
+</md-content> -->
+<md-content layout="flex" ">  
+    <md-grid-list 
         md-cols-gt-md="5" md-cols-sm="3" md-cols-md="8"
-        md-row-height-gt-md="1:1" md-row-height="4:3"
-        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px">
+        md-row-height-gt-md="1:1" md-row-height="fit"
+        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height:500px;width:1200px;" >
       <md-grid-tile
           ng-repeat="bet in bets">
          

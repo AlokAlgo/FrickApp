@@ -4,8 +4,8 @@ angular.module( 'frickapp.home', [
   'angular-jwt'
   
 ]).
-controller( 'HomeCtrl', function HomeController( $scope, auth, $http, $location, store ) {
-  $scope.serverIp = '104.196.96.128';
+controller( 'HomeCtrl', function HomeController( $scope, auth, $http, $location, store, $interval ) {
+  $scope.serverIp = 'localhost';
   $scope.auth = auth ;
   $scope.messages= [];
   $scope.flags = [{"text": "Will"}, {"text": "Will not"}];
@@ -60,10 +60,10 @@ $scope.getUser();
   
 $scope.bets = [];
 $scope.matches = [];
-
+$scope.suggestions = [];
 $scope.populateBets = function() {
 		$scope.bets = [];
-		var url1 = 'http://'+$scope.serverIp +':3002/api/v1/Toproom';
+		var url1 = 'http://'+$scope.serverIp +':3002/api/v1/Toproom'+ '?query={"valid":true}';
         $http.get(url1).success(
             function(data, status, headers, config){
                 $scope.bets = data ;// play here
@@ -77,7 +77,7 @@ $scope.populateBets = function() {
 	  
 $scope.populateMatches = function() {
 		$scope.matches = [];
-		var url = 'http://'+$scope.serverIp +':3002/api/v1/Match';
+		var url = 'http://'+$scope.serverIp +':3002/api/v1/Match' ;
          $http.get(url).success(
             function(data, status, headers, config){
 				alert(data +status);
@@ -90,17 +90,55 @@ $scope.populateMatches = function() {
 				
             });          
       };
+$scope.populateSuggestions = function() {
+		// initialize ssuggestions
+		$scope.suggestions = [];
+		// get the selected match metadata
+		var metadata = $scope.selectedMatch.metadata;
+		// for each data in metadata
+		metadata.forEach( function( data) {
+		var subject = data.name;
+		data.topics.forEach (function(topic) { 
+			// create optimistic suggestion
+			var suggestion = {};
+			suggestion.subject = subject;
+			suggestion.topicname = topic;
+			suggestion.optimistic = true;
+			suggestion.text = subject + ' ' + 'Will' + ' ' + topic  +  ' ' + 'x' ;
+			$scope.suggestions.push(suggestion);
+			
+			
+			// create pessimistic suggestion
+			var suggestion = {};
+			suggestion.subject = subject;
+			suggestion.topicname = topic;
+			suggestion.optimistic = true;
+			suggestion.text = subject + ' ' + 'Will Not' + ' ' + topic  +  ' ' + 'x' ;
+			$scope.suggestions.push(suggestion);
+			
+			}); //end for each topics
+		}); // end for metadata
+} // end function
 
- 
-$scope.addRow = function(){		
+ $scope.getMatches = function(searchText) {
+	 var result = [];
+	 $scope.suggestions.forEach(function(suggestion) 
+	 {
+		 if (suggestion.text.indexOf(searchText) > -1 ){
+			 result.push(suggestion);
+		 }
+	 });
+	 return result;
+ } // end function
+$scope.addRow = function(searchText){		
 var url = 'http://'+$scope.serverIp +':3002/api/v1/Toproom';
 var data = 
             JSON.stringify({
 				match_id : $scope.selectedMatch._id,
 				create_user_id : $scope.userId,
-				topicname : $scope.selectedTopic,
-				subject : $scope.selectedSubject.name,
-				optimistic : $scope.selectedTake.text == 'Will' ? true : false,
+				topicname : $scope.selectedSuggestion.topic,
+				subject : $scope.selectedSuggestion.subject.name,
+				optimistic : $scope.selectedSuggestion.optimistic,
 				val : $scope.val,
 				coinsgive : "10"
             });
@@ -111,9 +149,13 @@ var data =
         })
 };
 ///this shd be populated from  the api
+$scope.extractVal = function(searchText, selectedSuggestion) {
+	
+}
 
 $scope.selectedMatch = {};	
 $scope.populateBets();
+$interval($scope.populateBets, 10000);  
 $scope.populateMatches();
 
 
