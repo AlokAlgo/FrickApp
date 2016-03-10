@@ -43,8 +43,12 @@ topicSchema.post('save', function(doc) {
 	  valid : true
   }, {valid : false, match_user_id: doc.create_user_id } , function(err, topic) {
 		if (err)
-			console.log(error);
+			console.log(err);
 		if (topic) {
+		Toproom.findOneAndUpdate( {_id : doc._id}, {valid : false}, function(err, topic) {
+			if (err)
+			console.log(err);
+		});
 		var matchedbet = new  MatchedBet(
 		{
 			match_id : topic.match_id,
@@ -57,11 +61,10 @@ topicSchema.post('save', function(doc) {
 			val : doc.val
 		});
 		matchedbet.save(function(err) {
-				if (err)
+				if (err) 
 					console.log(err);
 			});
-		doc.valid = false;
-		doc.update();
+		 
   }
   })
   // here the message shd be published

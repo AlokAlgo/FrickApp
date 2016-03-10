@@ -1,4 +1,4 @@
-<div layout="flex">
+<div layout="flex" style="background:#b3f0ff">
 <md-menu-bar>
  <md-menu>
    <button ng-click="$mdOpenMenu()">
@@ -21,11 +21,18 @@
 <md-card>
 	<img src="{{auth.profile.picture}}" />
 </md-card>
+<md-label>
+This site is for sale Pl contact alkumar2000@gmail.com
+</md-label>
 </div>
-	<div layout="column">
-	<md-autocomplete  md-selected-item="selectedSuggestion" md-search-text="searchText" md-items="suggestion in getMatches(searchText)" md-item-text="suggestion.text" placeholder="Make your bet,  First select a Match and then start typing, Or you can pick a bet from the bets shown below">
+	<div layout="row" style="background:#e6faff">
+	<md-autocomplete  ngRequired="Please Enter" md-selected-item="selectedSuggestion" md-search-text="searchText" md-items="suggestion in getMatches(searchText)" md-item-text="suggestion.text" placeholder="Make your bet,  First select a Match and then start typing, Or you can pick a bet from the bets shown below">
 			<span md-highlight-text="searchText">{{suggestion.text}}</span>
 			</md-autocomplete>
+			<md-input-container>
+		
+		<input type="number" ngMaxlength=3 ng-model="val">
+		</md-input-container>
 	<!--
 		<md-autocomplete md-selected-item="selectedSubject" md-search-text="searchText" md-items="bet in selectedMatch.metadata" md-item-text="bet.name">
 			<span md-highlight-text="searchText">{{bet.name}}</span>
@@ -44,7 +51,7 @@
 		<form class="form-horizontal" role="form" ng-submit="addRow(searchText)">
 		<div class="form-group">								
 		<div style="padding-left:10px">
-			<md-button type="submit" value="Publish" class="md-raised">Publish
+			<md-button type="submit" value="Publish" class="md-raised" style="background:#8080ff">Publish
 			</md-button>
 		</div>
 		</div>
@@ -52,7 +59,7 @@
 		</form>
 </div>
 
-<div layout="flex" >
+<div>
 <!--  Chat window removing for now will be introduced again thr menu options
 <md-content layout="column">
 <form ng-submit="submit()">
@@ -68,18 +75,70 @@
   </md-list-item>
 </md-list>
 </md-content> -->
-<md-content layout="flex" ">  
+Match Bets
+<md-content layout="column">  
     <md-grid-list 
-        md-cols-gt-md="5" md-cols-sm="3" md-cols-md="8"
-        md-row-height-gt-md="1:1" md-row-height="fit"
-        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height:500px;width:1200px;" >
-      <md-grid-tile
+        md-cols-gt-md="6" md-cols-sm="2" md-cols-md="2"
+        md-row-height-gt-md="2:1" 
+        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height:500px;width:1200px;background:#e6faff" >
+      <md-grid-tile style="background:#b3f0ff"
           ng-repeat="bet in bets">
          
 		  {{bet.subject}} {{bet.optimistic ? 'Will' : 'Will Not'}} {{bet.topicname}} {{bet.val}}
+		  <form class="form-horizontal" role="form" ng-submit="challengeBet(bet)">
+		<div class="form-group">								
+		<div style="padding-left:10px">
+			<md-button type="submit" style="background:#8080ff" value="Publish" class="md-raised">Challenge
+			</md-button>
+		</div>
+		</div>
+		
+		</form>
       </md-grid-tile>
     </md-grid-list>
-	</md-content>
+	
 </md-content>
+</div>
+<div layout="row">
+<div layout="column">
+My Unmatched Bets 
+<md-content style="background:#b3f0ff" >  
+<md-grid-list 
+        md-cols-gt-md="3" md-cols-sm="3" md-cols-md="8"
+        md-row-height-gt-md="2:1" 
+        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height:400px;width:600px;" >
+      <md-grid-tile style="background:#e6faff"
+          ng-repeat="mybet in mybets" layout="column">
+         
+		  {{mybet.subject}} {{mybet.optimistic ? 'Will' : 'Will Not'}} {{mybet.topicname}} {{mybet.val}}
+		   <form class="form-horizontal" role="form" ng-submit="cancelBet(mybet._id)">
+		<div class="form-group">								
+		<div style="padding-left:10px">
+			<md-button type="submit" style="background:#8080ff" value="Cancel" class="md-raised">Cancel
+			</md-button>
+		</div>
+		</div>
+		
+		</form>
+		
+      </md-grid-tile>
+    </md-grid-list>
+	</md-content >  
+</div >
+<div>
+ My matched Bets
+<md-grid-list  
+        md-cols-gt-md="3" md-cols-sm="3" md-cols-md="8"
+        md-row-height-gt-md="2:1" 
+        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height400px;width:600px;background:#b3f0ff">
+      <md-grid-tile style="background:#e6faff"
+          ng-repeat="myMatched in myMatchedbets">
+         
+		  {{myMatched.newsType}}  {{myMatched.val}}
+      </md-grid-tile>
+    </md-grid-list> 
+</md-content>
+</div>
+</div>
 			
 </div>

@@ -5,12 +5,42 @@ angular.module( 'frickapp.home', [
   
 ]).
 controller( 'HomeCtrl', function HomeController( $scope, auth, $http, $location, store, $interval ) {
-  $scope.serverIp = 'localhost';
-  $scope.auth = auth ;
-  $scope.messages= [];
-  $scope.flags = [{"text": "Will"}, {"text": "Will not"}];
-  store.set('token', auth.idToken);
-  $scope.getUser = function() 
+	$scope.serverIp ='localhost';
+	$scope.userId='';
+	store.set('token', auth.idToken);
+	$scope.bets = [];
+	$scope.mybets = [];
+	$scope.matches = [];
+	$scope.suggestions = [];
+	$scope.myMatchedbets = [];
+$scope.populateMyBets = function() {
+		$scope.mybets = [];
+		var url = 'http://'+$scope.serverIp +':3002/api/v1/Toproom'+ '?query={"valid":true,"create_user_id":"' +  $scope.userId + '"}';
+		console.log(url);
+        $http.get(url).success(
+            function(data, status, headers, config){
+                $scope.mybets = data ;// play here
+            }) 
+       .error( function(data, status, headers, config){
+               // alert(data+ status);// play here
+				
+            });         
+      };
+$scope.populateMyMatchedBets = function() {
+		$scope.myMatchedbets = [];
+		var url = 'http://'+$scope.serverIp +':3002/api/v1/MatchedBet'+ '?query={"create_user_id":"' +  $scope.userId + '"}';
+		console.log(url);
+        $http.get(url).success(
+            function(data, status, headers, config){
+                $scope.myMatchedbets = data ;// play here
+            }) 
+       .error( function(data, status, headers, config){
+               // alert(data+ status);// play here
+				
+            });         
+      };
+	  	
+$scope.getUser = function() 
   {
 		var url = 'http://'+ $scope.serverIp  + ':3001/login';
 		var token = store.get('token');
@@ -22,10 +52,18 @@ controller( 'HomeCtrl', function HomeController( $scope, auth, $http, $location,
 		console.log(data);
         $http.post(url, data).success(function(data, status) {
             $scope.userId= data;
+			$scope.populateMyBets();
+			$scope.populateMyMatchedBets();
 			console.log(data);
         })
 };
+// get the USer first
 $scope.getUser();
+$scope.serverIp = 'localhost';
+$scope.auth = auth ;
+$scope.messages= [];
+store.set('token', auth.idToken);
+
  $scope.submit = function(event) {
 	 console.log('submit');
 	 var d = new Date();
@@ -58,9 +96,8 @@ $scope.getUser();
     $location.path('/login');
   }
   
-$scope.bets = [];
-$scope.matches = [];
-$scope.suggestions = [];
+
+
 $scope.populateBets = function() {
 		$scope.bets = [];
 		var url1 = 'http://'+$scope.serverIp +':3002/api/v1/Toproom'+ '?query={"valid":true}';
@@ -74,13 +111,13 @@ $scope.populateBets = function() {
             });         
       };
 	  
+ 
 	  
 $scope.populateMatches = function() {
 		$scope.matches = [];
 		var url = 'http://'+$scope.serverIp +':3002/api/v1/Match' ;
-         $http.get(url).success(
+        $http.get(url).success(
             function(data, status, headers, config){
-				alert(data +status);
 				console.log(data + status);
                 $scope.matches =data ;// play herej
 				
@@ -90,6 +127,8 @@ $scope.populateMatches = function() {
 				
             });          
       };
+	  
+	  
 $scope.populateSuggestions = function() {
 		// initialize ssuggestions
 		$scope.suggestions = [];
@@ -104,7 +143,7 @@ $scope.populateSuggestions = function() {
 			suggestion.subject = subject;
 			suggestion.topicname = topic;
 			suggestion.optimistic = true;
-			suggestion.text = subject + ' ' + 'Will' + ' ' + topic  +  ' ' + 'x' ;
+			suggestion.text = subject + ' ' + 'Will' + ' ' + topic   ;
 			$scope.suggestions.push(suggestion);
 			
 			
@@ -112,8 +151,8 @@ $scope.populateSuggestions = function() {
 			var suggestion = {};
 			suggestion.subject = subject;
 			suggestion.topicname = topic;
-			suggestion.optimistic = true;
-			suggestion.text = subject + ' ' + 'Will Not' + ' ' + topic  +  ' ' + 'x' ;
+			suggestion.optimistic = false;
+			suggestion.text = subject + ' ' + 'Will Not' + ' ' + topic   ;
 			$scope.suggestions.push(suggestion);
 			
 			}); //end for each topics
@@ -130,14 +169,15 @@ $scope.populateSuggestions = function() {
 	 });
 	 return result;
  } // end function
+ 
 $scope.addRow = function(searchText){		
 var url = 'http://'+$scope.serverIp +':3002/api/v1/Toproom';
 var data = 
             JSON.stringify({
 				match_id : $scope.selectedMatch._id,
 				create_user_id : $scope.userId,
-				topicname : $scope.selectedSuggestion.topic,
-				subject : $scope.selectedSuggestion.subject.name,
+				topicname : $scope.selectedSuggestion.topicname,
+				subject : $scope.selectedSuggestion.subject,
 				optimistic : $scope.selectedSuggestion.optimistic,
 				val : $scope.val,
 				coinsgive : "10"
@@ -148,15 +188,43 @@ var data =
             $scope.hello = data;
         })
 };
+
+$scope.cancelBet = function(id){		
+var url = 'http://'+$scope.serverIp +':3002/api/v1/Toproom/'+id;
+        $http.delete(url).success(function( status) {
+			alert("Bet is cancelled");
+        })
+};
 ///this shd be populated from  the api
-$scope.extractVal = function(searchText, selectedSuggestion) {
-	
+$scope.challengeBet = function(bet){		
+var url = 'http://'+$scope.serverIp +':3002/api/v1/Toproom';
+var data = 
+            JSON.stringify({
+				match_id : bet.match_id,
+				create_user_id : $scope.userId,
+				topicname : bet.topicname,
+				subject : bet.subject,
+				optimistic : !bet.optimistic,
+				val : bet.val,
+				coinsgive : bet.coinsgive
+            });
+       
+		console.log(data);
+        $http.post(url, data).success(function(data, status) {
+            $scope.hello = data;
+        })
+};
+$scope.selectedMatch = {};	
+//$scope.populateBets();
+$scope.populateMatches();
+$scope.refresh = function() {
+	$scope.populateBets();
+	$scope.populateMyBets();
 }
 
-$scope.selectedMatch = {};	
-$scope.populateBets();
-$interval($scope.populateBets, 10000);  
-$scope.populateMatches();
+$interval($scope.populateBets(), 10000);  
+
+//$interval($scope.populateMyBets(), 20000);  
 
 
 });
