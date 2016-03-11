@@ -1,52 +1,64 @@
-<div layout="flex" style="background:#b3f0ff">
-<md-menu-bar>
- <md-menu>
-   <button ng-click="$mdOpenMenu()">
+<div layout="flex" >
+
+
+<div layout="column" layout-fill>
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <div>CricCoins </div>
+      <!-- fill up the space between left and right area -->
+      <span flex>
+	  <md-input-container>
+	  <md-select ng-model="selectedMatch" ng-change="populateSuggestions()" placeholder="Select a Match">
+      <md-option ng-value="match" ng-repeat="match in  matches">{{ match.name }}</md-option>
+      </md-select>
+	  </md-input-container>
+	  
+	  </span
+	   <md-card >
+	  <md-content style="background:#ffccff">
+	 {{selectedMatch.score}} 
+	  </md-content>
+	  </md-card>
+	   <md-card>
+	  <img src="{{auth.profile.picture}}" />
+	  </md-card>
+	  <md-card>
+	  <md-content style="background:#ffccff">
+		Coins : {{user.coins}}
+		<md-divider/>
+		Available: {{user.coins - user.coinslocked}}
+	  </md-content>
+	  </md-card>
+      <md-menu-bar>
+	<md-menu>
+	<button ng-click="$mdOpenMenu()">
      Menu
-   </button>
+	</button>
    <md-menu-content>
-     <md-menu-item  ng-click="logout()" ng-model="settings.logout">Logout</md-menu-item>
-     <md-menu-divider></md-menu-divider>
-     <md-menu-item type="radio" ng-model="settings.mode" ng-value="1">Dashboard</md-menu-item>
-     <md-menu-item type="radio" ng-model="settings.mode" ng-value="1">Admin</md-menu-item>
+   <md-menu-item>
+     <md-button  style="background:#8080ff" ng-click="logout()" ng-model="settings.logout">Logout</md-button>
+	</md-menu-item>
+	 <md-menu-item>
+     <md-button  style="background:#8080ff" ng-click="admin()" ng-model="settings.logout">Admin</md-button>
+	</md-menu-item>
    </md-menu-content>
  </md-menu>
 </md-menu-bar>
- 
-<md-input-container>
-  <md-select ng-model="selectedMatch" ng-change="populateSuggestions()" placeholder="Select a Match">
-    <md-option ng-value="match" ng-repeat="match in  matches">{{ match.name }}</md-option>
-  </md-select>
-</md-input-container>
-<md-card>
-	<img src="{{auth.profile.picture}}" />
-</md-card>
-<md-label>
-This site is for sale Pl contact alkumar2000@gmail.com
-</md-label>
+    </div>
+  </md-toolbar>
 </div>
+
+</div>
+<md-divider/>
 	<div layout="row" style="background:#e6faff">
-	<md-autocomplete  ngRequired="Please Enter" md-selected-item="selectedSuggestion" md-search-text="searchText" md-items="suggestion in getMatches(searchText)" md-item-text="suggestion.text" placeholder="Make your bet,  First select a Match and then start typing, Or you can pick a bet from the bets shown below">
+
+	<md-autocomplete  ngRequired="Please Enter" md-selected-item="selectedSuggestion" md-search-text="searchText" md-items="suggestion in getMatches(searchText)" md-item-text="suggestion.text" placeholder="Make your bet">
 			<span md-highlight-text="searchText">{{suggestion.text}}</span>
 			</md-autocomplete>
 			<md-input-container>
 		
-		<input type="number" ngMaxlength=3 ng-model="val">
+		<input type="number"  ng-model="val">
 		</md-input-container>
-	<!--
-		<md-autocomplete md-selected-item="selectedSubject" md-search-text="searchText" md-items="bet in selectedMatch.metadata" md-item-text="bet.name">
-			<span md-highlight-text="searchText">{{bet.name}}</span>
-			</md-autocomplete>
-		<md-autocomplete md-selected-item="selectedTake" md-search-text="searchText1" md-items="take in flags" md-item-text="take.text">
-			<span md-highlight-text="searchText">{{take.text}}</span>
-			</md-autocomplete>
-		<md-autocomplete md-selected-item="selectedTopic" md-search-text="searchText2" md-items="take in selectedSubject.topics" md-item-text="take">
-			<span md-highlight-text="searchText">{{take}}</span>
-			</md-autocomplete>
-		<md-input-container>
-		<label>VAl</label>
-		<textarea ng-model="val"></textarea>
-		</md-input-container> -->
 		
 		<form class="form-horizontal" role="form" ng-submit="addRow(searchText)">
 		<div class="form-group">								
@@ -59,7 +71,7 @@ This site is for sale Pl contact alkumar2000@gmail.com
 		</form>
 </div>
 
-<div>
+<div style="background:#e6faff">
 <!--  Chat window removing for now will be introduced again thr menu options
 <md-content layout="column">
 <form ng-submit="submit()">
@@ -75,16 +87,18 @@ This site is for sale Pl contact alkumar2000@gmail.com
   </md-list-item>
 </md-list>
 </md-content> -->
+	<md-divider/>
 Match Bets
-<md-content layout="column">  
+<md-content>  
     <md-grid-list 
         md-cols-gt-md="6" md-cols-sm="2" md-cols-md="2"
         md-row-height-gt-md="2:1" 
         md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height:500px;width:1200px;background:#e6faff" >
       <md-grid-tile style="background:#b3f0ff"
           ng-repeat="bet in bets">
-         
+          <md-label>
 		  {{bet.subject}} {{bet.optimistic ? 'Will' : 'Will Not'}} {{bet.topicname}} {{bet.val}}
+		  </md-label>
 		  <form class="form-horizontal" role="form" ng-submit="challengeBet(bet)">
 		<div class="form-group">								
 		<div style="padding-left:10px">
@@ -99,7 +113,9 @@ Match Bets
 	
 </md-content>
 </div>
-<div layout="row">
+<md-divider/>
+<div layout="flex">
+
 <div layout="column">
 My Unmatched Bets 
 <md-content style="background:#b3f0ff" >  
@@ -109,8 +125,9 @@ My Unmatched Bets
         md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height:400px;width:600px;" >
       <md-grid-tile style="background:#e6faff"
           ng-repeat="mybet in mybets" layout="column">
-         
+         <md-label>
 		  {{mybet.subject}} {{mybet.optimistic ? 'Will' : 'Will Not'}} {{mybet.topicname}} {{mybet.val}}
+		   </md-label>
 		   <form class="form-horizontal" role="form" ng-submit="cancelBet(mybet._id)">
 		<div class="form-group">								
 		<div style="padding-left:10px">
@@ -125,6 +142,7 @@ My Unmatched Bets
     </md-grid-list>
 	</md-content >  
 </div >
+
 <div>
  My matched Bets
 <md-grid-list  
@@ -133,12 +151,13 @@ My Unmatched Bets
         md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height400px;width:600px;background:#b3f0ff">
       <md-grid-tile style="background:#e6faff"
           ng-repeat="myMatched in myMatchedbets">
-         
-		  {{myMatched.newsType}}  {{myMatched.val}}
+         <md-label>
+		  {{myMatched.subject}} {{myMatched.opt}} {{myMatched.topic}} {{myMatched.val}}
+		  <md-label>
       </md-grid-tile>
     </md-grid-list> 
-</md-content>
 </div>
+
 </div>
 			
 </div>

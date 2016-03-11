@@ -1,0 +1,48 @@
+<div layout="column" >
+<div layout="row" >
+ <md-input-container>
+	  <md-select ng-model="selectedMatch" ng-change="populateSuggestions()" placeholder="Select a Match">
+      <md-option ng-value="match" ng-repeat="match in  matches">{{ match.name }}</md-option>
+      </md-select>
+	   </md-input-container>
+	  <md-autocomplete  ngRequired="Please Enter" md-selected-item="selectedSuggestion" md-search-text="searchText" md-items="suggestion in getMatches(searchText)" md-item-text="suggestion.text" placeholder="Select NewsType">
+			<span md-highlight-text="searchText">{{suggestion.text}}</span>
+			</md-autocomplete>
+			<input type="text"  ng-model="val">
+			<md-checkbox  ng-model="isChecked" >
+			More ?
+			</md-checkbox>
+			<form class="form-horizontal" role="form" ng-submit="addEvent()">
+		<div class="form-group">								
+		<div style="padding-left:10px">
+			<md-button type="submit" value="PublishEvent" class="md-raised" style="background:#8080ff">Publish
+			</md-button>
+		</div>
+		</div>
+		
+		</form>
+			
+	 
+</div>
+<md-divider/>
+<div layout="column">
+<input type="text"  ng-model="matchName"  placeholder="MatchName"/>
+<input type="text"  ng-model="matchLocation" placeholder="MatchLocation"/>
+<input type="text"  ng-model="matchScore" placeholder="MatchScore" />
+<div layout="flex">
+<md-checkbox  ng-model="isMatchLive" >
+			Live ?
+			</md-checkbox>
+			<form class="form-horizontal" role="form" ng-submit="addMatch()">
+		<div class="form-group">								
+		<div style="padding-left:10px">
+			<md-button type="submit" value="PublishMatch" class="md-raised" style="background:#8080ff">Publish Match
+			</md-button>
+		</div>
+		</div>
+		
+		</form>
+			</div>
+<textarea  style="height:600px" ng-model="matchMetaData">
+</div>
+</div>

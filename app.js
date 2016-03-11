@@ -3,6 +3,7 @@ angular.module( 'frickapp', [
   'ngRoute',
   'frickapp.home',
   'frickapp.login',
+   'frickapp.admin',
   'angular-storage',
   'angular-jwt',
   'ngMaterial'
@@ -13,13 +14,18 @@ angular.module( 'frickapp', [
     .when( '/', {
       controller: 'HomeCtrl',
       templateUrl: 'home/home.html',
-      pageTitle: 'Homepage',
+      pageTitle: 'CricCoins',
       requiresLogin: true
     })
     .when( '/login', {
       controller: 'LoginCtrl',
       templateUrl: 'login/login.html',
       pageTitle: 'Login'
+    })
+	.when( '/admin', {
+      controller: 'AdminCtrl',
+      templateUrl: 'admin/admin.html',
+      pageTitle: 'Admin'
     });
 
 
@@ -52,7 +58,12 @@ angular.module( 'frickapp', [
 		  
 		  store.set('token',auth.token);
 		  store.set('token', auth.id_token);
-          $location.path('/');
+		  if($location.path().indexOf('admin') > -1) {
+			//$location.path('/admin');
+		  }
+		  else {
+			 $location.path('/'); 
+		  }
 		  
         }
 
@@ -61,7 +72,7 @@ angular.module( 'frickapp', [
 	 $location.path('/login');
   $scope.$on('$routeChangeSuccess', function(e, nextRoute){
     if ( nextRoute.$$route && angular.isDefined( nextRoute.$$route.pageTitle ) ) {
-      $scope.pageTitle = nextRoute.$$route.pageTitle + ' | Auth0 Sample' ;
+      $scope.pageTitle = nextRoute.$$route.pageTitle  ;
     }
   });
 });

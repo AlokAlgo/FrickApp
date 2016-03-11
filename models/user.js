@@ -8,6 +8,7 @@ var userSchema = new Schema({
   name: String,
   emailId: { type: String},
   coins: {type : Number},
+  coinslocked:{type : Number, default:0},
   password: { type: String},
   admin: Boolean,
   location: String,

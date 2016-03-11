@@ -39,7 +39,7 @@ io
 		if (user != null && user !== undefined) {
 			console.log("user is not there");
 			
-			var newUser = new User({user_id:decoded.sub, coins : '100'});
+			var newUser = new User({user_id:decoded.sub, coins : '100',coinslocked:'0'});
 			newUser.save(function(err) {
 				if (err)
 					console.log(err);
@@ -60,7 +60,14 @@ app.post("/login" , function (req, res) {
 	 console.log(token);
 	 var decoded = jwtdecode(token);
 	 console.log(decoded);
-	 res.send(decoded.sub);
+	 User.findOne({user_id:decoded.sub},function(err,user) {
+		 console.log(err);
+		 console.log(user);
+		 if (err) 
+			 console.log(err);
+		 res.send(user);
+		 
+	 });
 })
 	
 

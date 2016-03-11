@@ -2,37 +2,44 @@ angular.module( 'frickapp.home', [
 'auth0',
   'angular-storage',
   'angular-jwt'
-  
 ]).
-controller( 'HomeCtrl', function HomeController( $scope, auth, $http, $location, store, $interval ) {
-	$scope.serverIp ='localhost';
-	$scope.userId='';
+controller( 'HomeCtrl', function HomeController( $scope, auth, $http, $location, store, $interval) {
+
+	$scope.serverIp = $scope.serverIp || 'localhost';
+	$scope.user=$scope.user || {};
 	store.set('token', auth.idToken);
-	$scope.bets = [];
-	$scope.mybets = [];
-	$scope.matches = [];
-	$scope.suggestions = [];
-	$scope.myMatchedbets = [];
+	$scope.bets = $scope.bets || [];
+	$scope.mybets = $scope.mybets ||  [];
+	$scope.matches = $scope.matches || [];
+	$scope.suggestions = $scope.suggestions || [];
+	$scope.myMatchedbets =  $scope.myMatchedbets || [];
+	
 $scope.populateMyBets = function() {
 		$scope.mybets = [];
-		var url = 'http://'+$scope.serverIp +':3002/api/v1/Toproom'+ '?query={"valid":true,"create_user_id":"' +  $scope.userId + '"}';
+		var url = 'http://'+$scope.serverIp +':3002/api/v1/Toproom'+ '?query={"valid":true,"create_user_id":"' +  $scope.user.user_id + '"}';
 		console.log(url);
         $http.get(url).success(
             function(data, status, headers, config){
                 $scope.mybets = data ;// play here
             }) 
        .error( function(data, status, headers, config){
-               // alert(data+ status);// play here
-				
+                cosole.log(data+ status);// play here
             });         
       };
+	  
 $scope.populateMyMatchedBets = function() {
 		$scope.myMatchedbets = [];
-		var url = 'http://'+$scope.serverIp +':3002/api/v1/MatchedBet'+ '?query={"create_user_id":"' +  $scope.userId + '"}';
+		var url = 'http://'+$scope.serverIp +':3002/api/v1/MatchedBet'+ '?query={"create_user_id":"' +  $scope.user.user_id + '"}';
 		console.log(url);
         $http.get(url).success(
             function(data, status, headers, config){
-                $scope.myMatchedbets = data ;// play here
+                $scope.myMatchedbets = data ;
+				$scope.myMatchedbets.forEach(function(bet) {
+					var subTop = bet.newsType.split(" ");
+					bet.subject = subTop[0];
+					bet.topic = subTop[1];
+					bet.opt = bet.optimistic_user_id == $scope.user.user_id ? 'Will' : 'Will Not';
+				});
             }) 
        .error( function(data, status, headers, config){
                // alert(data+ status);// play here
@@ -51,7 +58,7 @@ $scope.getUser = function()
             });
 		console.log(data);
         $http.post(url, data).success(function(data, status) {
-            $scope.userId= data;
+            $scope.user= data;
 			$scope.populateMyBets();
 			$scope.populateMyMatchedBets();
 			console.log(data);
@@ -70,7 +77,7 @@ store.set('token', auth.idToken);
 	 $scope.socket.emit('chat message', auth.profile.name +d.getUTCMilliseconds()+ $scope.text ); 
 	 return false;
   }
- // var messages = ['nothing'];	
+  
   
   if (!$scope.socket) {
   var socket = io.connect('http://'+$scope.serverIp +':3001');
@@ -94,6 +101,10 @@ store.set('token', auth.idToken);
     store.remove('profile');
     store.remove('token');
     $location.path('/login');
+  }
+  
+  $scope.admin = function() {
+    $location.path('/admin');
   }
   
 
@@ -121,11 +132,7 @@ $scope.populateMatches = function() {
 				console.log(data + status);
                 $scope.matches =data ;// play herej
 				
-            }) 
-        .error( function(data, status, headers, config){
-             //   alert(data+ status);// play here
-				
-            });          
+            })        
       };
 	  
 	  
@@ -175,7 +182,7 @@ var url = 'http://'+$scope.serverIp +':3002/api/v1/Toproom';
 var data = 
             JSON.stringify({
 				match_id : $scope.selectedMatch._id,
-				create_user_id : $scope.userId,
+				create_user_id : $scope.user.user_id,
 				topicname : $scope.selectedSuggestion.topicname,
 				subject : $scope.selectedSuggestion.subject,
 				optimistic : $scope.selectedSuggestion.optimistic,
@@ -215,17 +222,9 @@ var data =
         })
 };
 $scope.selectedMatch = {};	
-//$scope.populateBets();
+$scope.populateBets();
+
 $scope.populateMatches();
-$scope.refresh = function() {
-	$scope.populateBets();
-	$scope.populateMyBets();
-}
-
-$interval($scope.populateBets(), 10000);  
-
-//$interval($scope.populateMyBets(), 20000);  
-
 
 });
 
