@@ -25,10 +25,11 @@
 	 
 </div>
 <md-divider/>
-<div layout="column">
+<div layout="flex">
 <input type="text"  ng-model="matchName"  placeholder="MatchName"/>
 <input type="text"  ng-model="matchLocation" placeholder="MatchLocation"/>
 <input type="text"  ng-model="matchScore" placeholder="MatchScore" />
+<input type="text"  ng-model="matchExternalId" placeholder="ExternalId" />
 <div layout="flex">
 <md-checkbox  ng-model="isMatchLive" >
 			Live ?
@@ -43,6 +44,46 @@
 		
 		</form>
 			</div>
-<textarea  style="height:600px" ng-model="matchMetaData">
 </div>
-</div>
+<md-divider/>
+<div layout="column">
+ <md-select ng-model="selectedMatchForUpdate"  placeholder="Select a Match to update">
+  <md-option ng-value="match" ng-repeat="match in  matches">{{ match.name }}</md-option>
+  </md-select>
+  <div layout="row">
+  <input type="text"  ng-model ="selectedMatchForUpdate.external_id" placeholder="ExternalID"/>
+  <md-button ng-click="updateMatch()" value="UpdateMatch" class="md-raised" style="background:#8080ff">Update Match
+			</md-button>
+  <md-button ng-click="addSubject()" value="AddSubject" class="md-raised" style="background:#8080ff">+Subject
+			</md-button>
+ </div>
+   <table>
+   <tbody>
+   <tr ng-repeat = "subject in selectedMatchForUpdate.metadata" ng-init="parentIndex = $index">
+      <td><input type="text" ng-model="subject.name" placeholder="SubjectName"/></td>
+			<td>
+			<md-button ng-click="addTopic(subject)" value="AddTopic" class="md-raised" style="background:#8080ff">+Topic
+			</md-button>
+			</td>
+      <td>	<table>
+	  <tbody>
+			<tr ng-repeat = "topic in subject.topics" ng-init="childIndex = $index">
+			<td>
+			<input type="text" ng-model="topic.name" placeholder="TopicName"/>
+			</td>
+			<td>
+			<input type="text" ng-model="topic.val" placeholder="TopicValue"/>
+			</td>
+			<td>
+			<md-checkbox  ng-model="topic.isLive" >
+			More ?
+			</md-checkbox>
+			<td>
+			</tr>
+			</tbody>
+			</table>
+	  
+	  </td>
+   </tr>
+   </tbody>
+</table>

@@ -15,6 +15,7 @@ controller( 'HomeCtrl', function HomeController( $scope, auth, $http, $location,
 	$scope.myMatchedbets =  $scope.myMatchedbets || [];
 	
 $scope.populateMyBets = function() {
+	console.log("getscalled");
 		$scope.mybets = [];
 		var url = 'http://'+$scope.serverIp +':3002/api/v1/Toproom'+ '?query={"valid":true,"create_user_id":"' +  $scope.user.user_id + '"}';
 		console.log(url);
@@ -223,6 +224,13 @@ var data =
 };
 $scope.selectedMatch = {};	
 $scope.populateBets();
+$scope.refresh = function() {
+	$scope.populateBets();
+	$scope.populateMyMatchedBets();
+	$scope.populateMyBets();
+}
+
+ $interval($scope.refresh, 20000);
 
 $scope.populateMatches();
 

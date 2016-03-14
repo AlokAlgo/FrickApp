@@ -7,6 +7,7 @@ var matchSchema = new Schema({
   name: { type: String, required: true, unique: true },
   location:{ type: String, required: true },
   score: { type: String, required: true },
+  external_id : { type : String},
   metadata: [Schema.Types.Mixed],
   live : {type: Boolean},
   created_at: Date,

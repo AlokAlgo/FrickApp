@@ -50,12 +50,13 @@ $scope.populateSuggestions = function() {
 		var subject = data.name;
 		data.topics.forEach (function(topic) { 
 			// create optimistic suggestion
+		if(topic.live) {
 			var suggestion = {};
 			suggestion.subject = subject;
-			suggestion.topicname = topic;
-			suggestion.text = subject  + ' ' + topic   ;
+			suggestion.topicname = topic.name;
+			suggestion.text = subject  + ' ' + topic.name   ;
 			$scope.suggestions.push(suggestion);
-			
+		}
 			}); //end for each topics
 		}); // end for metadata
 } // end function
@@ -89,20 +90,37 @@ var data =
 };
 $scope.addMatch = function(){		
 var url = 'http://'+$scope.serverIp +':3002/api/v1/Match';
-var metadata = $scope.matchMetaData.replace(/[^\x20-\x7E]/gmi, "");
-var newmetadata = metadata.replace(/\\/g, "");
 var data = 
             JSON.stringify({
 				name : $scope.matchName,
 				location : $scope.matchLocation,
 				score : $scope.matchScore,
-				live : $scope.isMatchLive,
-				metadata : newmetadata
+				live : $scope.isMatchLive
             });
        
-		console.log(data);
+		
         $http.post(url, data).success(function(data, status) {
             $scope.hello = data;
+        })
+};
+
+$scope.addSubject = function(){	
+var subject = {};
+subject.name = '';
+subject.topics = [];
+$scope.selectedMatchForUpdate.metadata.push(subject);
+};
+
+$scope.addTopic = function(subject) {
+	var topic = {};
+topic.name= '';
+topic.val = '';
+subject.topics.push(topic);
+}
+$scope.updateMatch = function(){		
+var url = 'http://'+$scope.serverIp +':3002/api/v1/Match';
+        $http.put(url, $scope.selectedMatchForUpdate).success(function(data, status) {
+            alert("Match Updated Succesfully");
         })
 };
 
