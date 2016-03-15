@@ -149,18 +149,18 @@ $scope.populateSuggestions = function() {
 			// create optimistic suggestion
 			var suggestion = {};
 			suggestion.subject = subject;
-			suggestion.topicname = topic;
+			suggestion.topicname = topic.name;
 			suggestion.optimistic = true;
-			suggestion.text = subject + ' ' + 'Will' + ' ' + topic   ;
+			suggestion.text = subject + ' ' + 'Will' + ' ' + topic.name   ;
 			$scope.suggestions.push(suggestion);
 			
 			
 			// create pessimistic suggestion
 			var suggestion = {};
 			suggestion.subject = subject;
-			suggestion.topicname = topic;
+			suggestion.topicname = topic.name;
 			suggestion.optimistic = false;
-			suggestion.text = subject + ' ' + 'Will Not' + ' ' + topic   ;
+			suggestion.text = subject + ' ' + 'Will Not' + ' ' + topic.name   ;
 			$scope.suggestions.push(suggestion);
 			
 			}); //end for each topics

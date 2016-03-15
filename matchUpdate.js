@@ -1,9 +1,12 @@
 var http = require('http');
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/test');
+
 
 var options = {
   host: 'cricscore-api.appspot.com',
   port: '',
-  path: '/csa?id=971709'
+  path: '/csa?id=951329'
 };
 function updateMatch() {
 // it shd get all the live matches
@@ -30,6 +33,11 @@ resp.on('end', function() {
             var parsed = JSON.parse(body);
 			// here it shd call the process method which will do all the processing
 			console.log(parsed);
+			Match.findOneAndUpdate( {external_id: '951329'},{score : parsed.de}, function(err,match) {
+				if (err) {
+					console.log(err);
+				}
+			});
 });
 
 });
