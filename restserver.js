@@ -13,7 +13,7 @@ app.use(methodOverride());
 
 router.use(function(req, res, next) {  
     res.header('Access-Control-Allow-Origin', '*');
-	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,PATCH,DELETE,OPTIONS');
     // we have added this Access-Control-Allow-Headers option
     res.header('Access-Control-Allow-Headers', "X-Requested-With, Content-Type, Authorization");
     if (req.method == 'OPTIONS') {

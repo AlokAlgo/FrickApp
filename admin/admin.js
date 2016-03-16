@@ -4,8 +4,8 @@ angular.module( 'frickapp.admin', [
   'angular-jwt'
 ]).
 controller( 'AdminCtrl', function AdminController( $scope, auth, $http, $location, store, $interval) {
-
-	$scope.serverIp = $scope.serverIp || '104.196.96.128';
+	
+	$scope.serverIp = $scope.serverIp || 'localhost';
 	$scope.user=$scope.user || {};
 	store.set('token', auth.idToken);
 	$scope.getUser = function() 
@@ -25,7 +25,6 @@ controller( 'AdminCtrl', function AdminController( $scope, auth, $http, $locatio
 };
 // get the USer first
 $scope.getUser();
-$scope.serverIp = '104.196.96.128';
 $scope.auth = auth ;
 store.set('token', auth.idToken);
 
@@ -50,7 +49,7 @@ $scope.populateSuggestions = function() {
 		var subject = data.name;
 		data.topics.forEach (function(topic) { 
 			// create optimistic suggestion
-		if(topic.live) {
+		if(topic.isLive) {
 			var suggestion = {};
 			suggestion.subject = subject;
 			suggestion.topicname = topic.name;
@@ -95,7 +94,8 @@ var data =
 				name : $scope.matchName,
 				location : $scope.matchLocation,
 				score : $scope.matchScore,
-				live : $scope.isMatchLive
+				live : $scope.isMatchLive,
+				external_id : $scope.matchExternalId
             });
        
 		
@@ -112,14 +112,14 @@ $scope.selectedMatchForUpdate.metadata.push(subject);
 };
 
 $scope.addTopic = function(subject) {
-	var topic = {};
+var topic = {};
 topic.name= '';
 topic.val = '';
 subject.topics.push(topic);
 }
 $scope.updateMatch = function(){		
-var url = 'http://'+$scope.serverIp +':3002/api/v1/Match';
-        $http.put(url, $scope.selectedMatchForUpdate).success(function(data, status) {
+var url = 'http://'+$scope.serverIp +':3002/api/v1/Match/' + $scope.selectedMatchForUpdate._id;
+        $http.patch(url, $scope.selectedMatchForUpdate).success(function(data, status) {
             alert("Match Updated Succesfully");
         })
 };

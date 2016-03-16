@@ -51,6 +51,7 @@
   <md-option ng-value="match" ng-repeat="match in  matches">{{ match.name }}</md-option>
   </md-select>
   <div layout="row">
+   <input type="text"  ng-model ="selectedMatchForUpdate.score" placeholder="Score"/>
   <input type="text"  ng-model ="selectedMatchForUpdate.external_id" placeholder="ExternalID"/>
   <md-button ng-click="updateMatch()" value="UpdateMatch" class="md-raised" style="background:#8080ff">Update Match
 			</md-button>

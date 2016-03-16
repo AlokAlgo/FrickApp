@@ -4,8 +4,7 @@ angular.module( 'frickapp.home', [
   'angular-jwt'
 ]).
 controller( 'HomeCtrl', function HomeController( $scope, auth, $http, $location, store, $interval) {
-
-	$scope.serverIp = $scope.serverIp || '104.196.96.128';
+	$scope.serverIp = $scope.serverIp || 'localhost';
 	$scope.user=$scope.user || {};
 	store.set('token', auth.idToken);
 	$scope.bets = $scope.bets || [];
@@ -67,7 +66,6 @@ $scope.getUser = function()
 };
 // get the USer first
 $scope.getUser();
-$scope.serverIp = '104.196.96.128';
 $scope.auth = auth ;
 $scope.messages= [];
 store.set('token', auth.idToken);
@@ -135,7 +133,14 @@ $scope.populateMatches = function() {
 				
             })        
       };
-	  
+$scope.updateSelectedMatchScore = function(id) {
+		var url = 'http://'+$scope.serverIp +':3002/api/v1/Match/' +id ;
+        $http.get(url).success(
+            function(data, status, headers, config){
+				console.log(data + status);
+                $scope.selectedMatch.score =data.score ;// play herej
+            })        
+      };
 	  
 $scope.populateSuggestions = function() {
 		// initialize ssuggestions
@@ -222,12 +227,16 @@ var data =
             $scope.hello = data;
         })
 };
-$scope.selectedMatch = {};	
+//$scope.selectedMatch = {};	
 $scope.populateBets();
 $scope.refresh = function() {
+	
 	$scope.populateBets();
 	$scope.populateMyMatchedBets();
 	$scope.populateMyBets();
+	if ($scope.selectedMatch !=null) {
+	$scope.updateSelectedMatchScore($scope.selectedMatch._id);
+	}
 }
 
  $interval($scope.refresh, 20000);
