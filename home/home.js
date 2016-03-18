@@ -36,7 +36,7 @@ $scope.populateMyMatchedBets = function() {
 		console.log(url);
         $http.get(url).success(
             function(data, status, headers, config){
-                $scope.myMatchedbets = data ;
+				$scope.myMatchedbets.push.apply($scope.myMatchedbets, data);
 				$scope.myMatchedbets.forEach(function(bet) {
 					var pos = bet.newsType.lastIndexOf(" ");
 					var newsType = bet.newsType;
@@ -44,9 +44,9 @@ $scope.populateMyMatchedBets = function() {
 					bet.topic = newsType.slice(pos+1,newsType.length);
 					bet.opt = bet.optimistic_user_id == $scope.user.user_id ? 'Will' : 'Will Not';
 					if (bet.settled) {
-						bet.result = bet.win_user_id == $scope.user.user_id ? 'You Won' : 'You Lost';
+						bet.result =  'Settled';
 					} else {
-						bet.result = 'Yet to be settled'
+						bet.result = 'Yet to be settled';
 					}
 				});
             }) 
@@ -57,8 +57,8 @@ $scope.populateMyMatchedBets = function() {
 		var url = 'http://'+$scope.serverIp +':3002/api/v1/MatchedBet'+ '?query={ "match_id" : "' +$scope.selectedMatch._id +'","match_user_id":"' +  $scope.user.user_id + '"}';
 		console.log(url);
         $http.get(url).success(
-            function(data, status, headers, config){
-                $scope.myMatchedbets = data ;
+            function(bata, status, headers, config){
+                $scope.myMatchedbets.push.apply($scope.myMatchedbets, bata);
 				$scope.myMatchedbets.forEach(function(bet) {
 					var pos = bet.newsType.lastIndexOf(" ");
 					var newsType = bet.newsType;
@@ -66,7 +66,7 @@ $scope.populateMyMatchedBets = function() {
 					bet.topic = newsType.slice(pos+1,newsType.length);
 					bet.opt = bet.optimistic_user_id == $scope.user.user_id ? 'Will' : 'Will Not';
 					if (bet.settled) {
-						bet.result = bet.win_user_id == $scope.user.user_id ? 'You Won' : 'You Lost';
+						bet.result = 'Settled';
 					} else {
 						bet.result = 'Yet to be Settled';
 					}
