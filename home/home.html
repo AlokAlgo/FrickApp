@@ -19,15 +19,14 @@
 	 {{selectedMatch.score}} 
 	  </md-content>
 	  </md-card>
-	   <span ng-bind="coins"></span>
 	   <md-card>
 	  <img src="{{auth.profile.picture}}" />
 	  </md-card>
 	  <md-card>
 	  <md-content style="background:#ffccff" ng-cloak >
-		Coins : {{user.coins}}
+		$ : {{user.coins}}
 		<md-divider/>
-		Available: {{user.coins -user.coinslocked}}
+		$Avlbl: {{user.coins -user.coinslocked}}
 	  </md-content>
 	  </md-card>
       <md-menu-bar>
@@ -53,20 +52,21 @@
 <md-divider/>
 	<div layout="row" style="background:#e6faff">
 
-	<md-autocomplete  ngRequired="Please Enter" md-selected-item="selectedSuggestion" md-search-text="searchText" md-items="suggestion in getMatches(searchText)" md-item-text="suggestion.text" placeholder="Make your bet">
+	<md-autocomplete  ngRequired="Please Enter" md-selected-item="selectedSuggestion" md-search-text="searchText" md-items="suggestion in getMatches(searchText)" md-item-text="suggestion.text" placeholder="Select Match and type">
 			<span md-highlight-text="searchText">{{suggestion.text}}</span>
 			</md-autocomplete>
-			<md-input-container>
-		
-		<input type="number"  ng-model="val">
+			
+		<md-input-container>
+		<input type="number"  ng-model="val" placeholder = "Enter Val">
+		</md-input-container>
+		</div>
+		<div layout="row">
+		<md-input-container>
+		<input type="number"  ng-model="coinsgive" placeholder = "risk coins">
 		</md-input-container>
 		<md-input-container>
 		
-		<input type="number"  ng-model="coinsgive">
-		</md-input-container>
-		<md-input-container>
-		
-		<input type="number"  ng-model="coinstake">
+		<input type="number"  ng-model="coinstake" placeholder = "reward coins">
 		</md-input-container>
 		
 		<form class="form-horizontal" role="form" ng-submit="addRow(searchText)">
@@ -78,7 +78,8 @@
 		</div>
 		
 		</form>
-</div>
+		</div>
+
 
 <div style="background:#e6faff">
 <!--  Chat window removing for now will be introduced again thr menu options
@@ -100,13 +101,16 @@
 Match Bets
 <md-content>  
     <md-grid-list 
-        md-cols-gt-md="6" md-cols-sm="2" md-cols-md="2"
+        md-cols-gt-md="5" md-cols-sm="2" md-cols-md="2"
         md-row-height-gt-md="2:1" 
         md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height:500px;width:1200px;background:#e6faff" >
       <md-grid-tile style="background:#b3f0ff"
           ng-repeat="bet in bets">
           <md-label>
 		  {{bet.subject}} {{bet.optimistic ? 'Will' : 'Will Not'}} {{bet.topicname}} {{bet.val}}
+		  </md-label>
+		  <md-label>
+		   Your Risk:{{ bet.coinstake }} Reward:{{ bet.coinsgive}}
 		  </md-label>
 		  <form class="form-horizontal" role="form" ng-submit="challengeBet(bet)">
 		<div class="form-group">								
@@ -130,13 +134,16 @@ My Unmatched Bets
 <md-content style="background:#b3f0ff" >  
 <md-grid-list 
         md-cols-gt-md="3" md-cols-sm="3" md-cols-md="8"
-        md-row-height-gt-md="2:1" 
+        md-row-height-gt-md="3:2" 
         md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height:400px;width:600px;" >
       <md-grid-tile style="background:#e6faff"
           ng-repeat="mybet in mybets" layout="column">
          <md-label>
 		  {{mybet.subject}} {{mybet.optimistic ? 'Will' : 'Will Not'}} {{mybet.topicname}} {{mybet.val}}
 		   </md-label>
+		    <md-label>
+		   My Risk:{{ mybet.coinsgive }}  Reward : {{ mybet.coinstake }} 
+		  </md-label>
 		   <form class="form-horizontal" role="form" ng-submit="cancelBet(mybet._id)">
 		<div class="form-group">								
 		<div style="padding-left:10px">
@@ -164,7 +171,7 @@ My Unmatched Bets
 		  {{myMatched.subject}} {{myMatched.opt}} {{myMatched.topic}} {{myMatched.val}}
 		  </md-label>
 		   <md-label>
-		  {{myMatched.result}}
+		  {{ myMatched.result}}
 		  </md-label> 
       </md-grid-tile>
     </md-grid-list> 

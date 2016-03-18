@@ -32,11 +32,21 @@ $scope.populateMyBets = function() {
 $scope.populateMyMatchedBets = function() {
 		$scope.myMatchedbets = [];
 		if($scope.selectedMatch) {
-		var url = 'http://'+$scope.serverIp +':3002/api/v1/MatchedBet'+ '?query={ "match_id" : "' +$scope.selectedMatch._id +'","create_user_id":"' +  $scope.user.user_id + '"}';
+			var query = JSON.stringify({
+									$or: [{
+											create_user_id: $scope.user.user_id
+											},
+											{
+											match_user_id: $scope.user.user_id
+											}
+										  ],
+											match_id: $scope.selectedMatch._id
+										});
+		var url = 'http://'+$scope.serverIp +':3002/api/v1/MatchedBet'+ '?query= ' + query;
 		console.log(url);
         $http.get(url).success(
             function(data, status, headers, config){
-				$scope.myMatchedbets.push.apply($scope.myMatchedbets, data);
+				$scope.myMatchedbets=data;
 				$scope.myMatchedbets.forEach(function(bet) {
 					var pos = bet.newsType.lastIndexOf(" ");
 					var newsType = bet.newsType;
@@ -54,29 +64,7 @@ $scope.populateMyMatchedBets = function() {
                // alert(data+ status);// play here
 				
             });
-		var url = 'http://'+$scope.serverIp +':3002/api/v1/MatchedBet'+ '?query={ "match_id" : "' +$scope.selectedMatch._id +'","match_user_id":"' +  $scope.user.user_id + '"}';
-		console.log(url);
-        $http.get(url).success(
-            function(bata, status, headers, config){
-                $scope.myMatchedbets.push.apply($scope.myMatchedbets, bata);
-				$scope.myMatchedbets.forEach(function(bet) {
-					var pos = bet.newsType.lastIndexOf(" ");
-					var newsType = bet.newsType;
-					bet.subject =  newsType.slice(0,pos);
-					bet.topic = newsType.slice(pos+1,newsType.length);
-					bet.opt = bet.optimistic_user_id == $scope.user.user_id ? 'Will' : 'Will Not';
-					if (bet.settled) {
-						bet.result = 'Settled';
-					} else {
-						bet.result = 'Yet to be Settled';
-					}
-				});
-            }) 
-       .error( function(data, status, headers, config){
-               // alert(data+ status);// play here
-				
-            });  	
-		}			
+		}	 // end if		
       };
 	  	
 $scope.getUser = function() 
@@ -237,6 +225,7 @@ var data =
        
 		console.log(data);
         $http.post(url, data).success(function(data, status) {
+			alert("You have succesfully published  bet, Your page will refresh shortly");
             $scope.hello = data;
         })
 };
@@ -264,7 +253,7 @@ var data =
        
 		console.log(data);
         $http.post(url, data).success(function(data, status) {
-            $scope.hello = data;
+           alert("You have succesfully created the counter bet You page will refresh shortly");
         })
 };
 //$scope.selectedMatch = {};	
