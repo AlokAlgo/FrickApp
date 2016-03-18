@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test');
 var Match = require('./models/match');
 var News =  require('./models/news');
-var external_id = '951331';
+var external_id = '951335';
 
 var options = {
   host: 'cricscore-api.appspot.com',
@@ -52,7 +52,7 @@ resp.on('end', function() {
 				console.log("Curre" + curData.text);
 				// get both Match Scores
 				// if scores are same don't do anything
-				if ( !(prevData.text === curData.text))
+				if ( !(prevData.text == curData.text))
 				{
 					// forEach Batsman in Score1
 					prevData.batsmen.forEach(function(batsman) {

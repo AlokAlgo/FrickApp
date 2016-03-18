@@ -10,7 +10,9 @@ var jwt  = require('jsonwebtoken');
 var auth = require('./auth.js');
 router.use(bodyParser.json());
 app.use(methodOverride());
-
+restify.defaults({
+  findOneAndRemove: false
+});
 router.use(function(req, res, next) {  
     res.header('Access-Control-Allow-Origin', '*');
 	res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,PATCH,DELETE,OPTIONS');

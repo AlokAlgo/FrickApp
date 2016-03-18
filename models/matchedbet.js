@@ -9,9 +9,10 @@ var matchedbetSchema = new Schema({
   match_user_id: {type: String, required : true, index : true},
   newsType: {type: String, required : true},
   val: {type: Number, index : true},
+  settled : {type: Boolean, required: true, default: false},
   optimistic_user_id : {type: String, required : true},
   coinsgive: {type: Number, required : true},
-  coinstake: {type: Number},
+  coinstake: {type: Number, required: true},
   created_at: Date,
   updated_at: Date
 });

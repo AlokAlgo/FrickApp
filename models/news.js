@@ -29,7 +29,7 @@ newsSchema.post('save', function(doc) {
 	
 	if ( !doc.moreflag )  {
 		// TO DO here all the unmatched bets should be invalidated
-		query.where('newsType', doc.newsType).
+		query.where('newsType', doc.newsType).where('settled', false).
 		 where('match_id', doc.match_id);
 	} else {
 		query.where('newsType', doc.newsType)
@@ -41,18 +41,22 @@ newsSchema.post('save', function(doc) {
 		if (err)
 		console.log(err);
 		bets.forEach(function(bet) {
+		// the matched bet settled flag shd be set to true
+		
 		// now settle the bet
 			var pessimistId = bet.create_user_id == bet.optimistic_user_id ? bet.match_user_id : bet.create_user_id;
+			var winner = doc.val >= bet.val ? bet.optimistic_user_id : pessimistId;
+			var looser = doc.val >= bet.val ? pessimistId : bet.optimistic_user_id;
 			var settledbet = new  SettledBet(
 			{
 				match_id : bet.match_id,
 				create_user_id : bet.create_user_id,
 				match_user_id : bet.match_user_id,
-				win_user_id : doc.val >= bet.val ? bet.optimistic_user_id : pessimistId,
-				loose_user_id : doc.val >= bet.val ? pessimistId : bet.optimistic_user_id,
+				win_user_id : winner,
+				loose_user_id : looser,
 				optimistic : doc.optimistic,
 				optimistic_user_id : bet.optimistic_user_id,
-				coins : bet.coinsgive,
+				coins : doc.create_user_id == winner ? bet.coinstake : bet.coinsgive,
 				resultVal : doc.val,
 				newsType : doc.newsType,
 				val : bet.val
@@ -60,25 +64,30 @@ newsSchema.post('save', function(doc) {
 			settledbet.save(function(err,setbet) {
 				if (err)
 					console.log(err); 
+				// here the matched 
 				User.findOne({'user_id' : setbet.win_user_id}, function (err, user) {
 					if (err) 	
 					console.log(err);
 					user.coins = user.coins + setbet.coins;
+					user.coinslocked = user.coinslocked - setbet.coins;
 					user.save();
-					
 				});
 				User.findOne({'user_id' : setbet.loose_user_id}, function (err, user) {
 					if (err) 	
 					console.log(err);
 					user.coins = user.coins - setbet.coins;
+					user.coinslocked = user.coinslocked - setbet.coins;
 					user.save();
 				});
-			
+				
 			}); // end save
-		
+			
+				bet.settled = true;
+				console.log("The bet is settled" );
+				bet.save();
 		});// end for each
 	}); // end query exec
-// TO DO here all the unmatched bets should be invalidated if more flag is false for this match and this subject and Topic
+
 //get the subjet and topic from news Type
 var newsType = doc.newsType;
 var pos = newsType.lastIndexOf(" ");
@@ -90,17 +99,22 @@ var topicname =newsType.slice(pos+1,newsType.length);
 console.log("pos save news" + "subject " + subject + "topic " + topicname);
 
 var match_id = doc.match_id;
+//  here all the unmatched bets should be invalidated if more flag is false for this match and this subject and Topic
+if (!doc.moreflag) {
 var topQuery = Toproom.find({match_id : match_id, valid : true, subject: subject, topicname : topicname});
 topQuery.exec(function(err, unmatchedbets) {
 	unmatchedbets.forEach(function(unmatchedbet) {
+		
 		unmatchedbet.valid = false;
 		unmatchedbet.save(function(err, data) {
 			if (err) {
 				console.log(err);
 			}
 		}); // end save
+		
 	}); // end forEach
 }); // end exec
+}// end if more flag
 
 var subjectfound = false;
 var matchQuery = Match.findOne({_id : match_id});

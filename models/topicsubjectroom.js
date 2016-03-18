@@ -11,7 +11,7 @@ var topicSchema = new Schema({
   subject : { type: String, required: true, index: true },
   optimistic: { type : Boolean, required: true },
   coinsgive: { type: Number, required: true },
-  coinstake:  { type: Number},
+  coinstake:  { type: Number, required: true},
   val:  { type: Number, index: true } ,
   valid : {type : Boolean, default: true },
   created_at: Date,
@@ -25,20 +25,39 @@ var topicSchema = new Schema({
 var Toproom = mongoose.model('Toproom', topicSchema);
 
 var MatchedBet = require('./matchedbet');
+var User = require('./user');
 
+topicSchema.post('remove', function(doc) {
+	console.log("bet got deleted ");
+	User.findOne({user_id : doc.create_user_id}, function(err, user) {
+	  if (err) {
+		  console.log(err);
+	  }
+	  user.coinslocked = user.coinslocked - doc.coinsgive;
+	  user.save();
+  });
+});
 
 topicSchema.post('save', function(doc) {
   console.log('%s has been saved', doc._id);
   // find if something matches
   // and updae accordingly
-  
+  // find the userid and update blocked coins
+  User.findOne({user_id : doc.create_user_id}, function(err, user) {
+	  if (err) {
+		  console.log(err);
+	  }
+	  user.coinslocked = user.coinslocked + doc.coinsgive;
+	  user.save();
+  });
   Toproom.findOneAndUpdate(
   {
 	  topicname : doc.topicname,
 	  subject : doc.subject,
  	  optimistic : !doc.optimistic ,
 	  val : doc.val,
-	  coinsgive : doc.coinsgive,
+	  coinsgive : doc.coinstake,
+	  coinstake : doc.coinsgive,
 	  match_id : doc.match_id,
 	  valid : true
   }, {valid : false, match_user_id: doc.create_user_id } , function(err, topic) {
@@ -58,6 +77,7 @@ topicSchema.post('save', function(doc) {
 			newsType  : topic.subject + ' ' + topic.topicname, 
 			optimistic : doc.optimistic, 
 			coinsgive : doc.coinsgive,
+			coinstake : doc.coinstake,
 			val : doc.val
 		});
 		matchedbet.save(function(err) {

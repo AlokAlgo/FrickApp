@@ -24,6 +24,7 @@ var env = {
 app.set('views', __dirname + '/');
 //app.set('view engine', 'jade');
 app.use(bodyParser.json());
+/* commenting for now will be used in future
 io
 	.on('connection', socketioJwt.authorize({
 		secret: Buffer(JSON.stringify(process.env.AUTH0_CLIENT_SECRET), 'base64'),
@@ -53,7 +54,7 @@ io
 			io.emit('chat message', msg);
 		});
 	})
-	
+	*/
 app.use(express.static(__dirname + '/'));
 app.post("/login" , function (req, res) {
 	 var token = req.body.token;
@@ -61,14 +62,23 @@ app.post("/login" , function (req, res) {
 	 var decoded = jwtdecode(token);
 	 console.log(decoded);
 	 User.findOne({user_id:decoded.sub},function(err,user) {
+		 if (err) {
 		 console.log(err);
-		 console.log(user);
-		 if (err) 
-			 console.log(err);
-		 res.send(user);
-		 
-	 });
-})
+		 }
+		 if (user == null) {
+			 console.log("new User getting created");
+			 var newUser = new User({user_id:decoded.sub, coins : '100',coinslocked:'0'});
+			 newUser.save(function(err, newUser) {
+				if (err) {
+					console.log(err);
+				} 
+					res.send(newUser);
+			});
+		 } else {
+			 res.send(user);
+		 }
+	 }); 
+}) // end post
 	
 
 

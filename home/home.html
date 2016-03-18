@@ -13,20 +13,21 @@
       </md-select>
 	  </md-input-container>
 	  
-	  </span
+	  </span>
 	   <md-card >
 	  <md-content style="background:#ffccff">
 	 {{selectedMatch.score}} 
 	  </md-content>
 	  </md-card>
+	   <span ng-bind="coins"></span>
 	   <md-card>
 	  <img src="{{auth.profile.picture}}" />
 	  </md-card>
 	  <md-card>
-	  <md-content style="background:#ffccff">
+	  <md-content style="background:#ffccff" ng-cloak >
 		Coins : {{user.coins}}
 		<md-divider/>
-		Available: {{user.coins - user.coinslocked}}
+		Available: {{user.coins -user.coinslocked}}
 	  </md-content>
 	  </md-card>
       <md-menu-bar>
@@ -58,6 +59,14 @@
 			<md-input-container>
 		
 		<input type="number"  ng-model="val">
+		</md-input-container>
+		<md-input-container>
+		
+		<input type="number"  ng-model="coinsgive">
+		</md-input-container>
+		<md-input-container>
+		
+		<input type="number"  ng-model="coinstake">
 		</md-input-container>
 		
 		<form class="form-horizontal" role="form" ng-submit="addRow(searchText)">
@@ -153,6 +162,9 @@ My Unmatched Bets
           ng-repeat="myMatched in myMatchedbets">
          <md-label>
 		  {{myMatched.subject}} {{myMatched.opt}} {{myMatched.topic}} {{myMatched.val}}
+		  <md-label>
+		   <md-label>
+		  {{myMatched.result}}
 		  <md-label>
       </md-grid-tile>
     </md-grid-list> 
