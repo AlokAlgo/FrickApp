@@ -1,6 +1,4 @@
 <div layout="flex" >
-
-
 <div layout="column" layout-fill>
   <md-toolbar>
     <div class="md-toolbar-tools">
@@ -15,17 +13,16 @@
 	  
 	  </span>
 	   <md-card >
-	  <md-content style="background:#ffccff">
+	  <md-content style="background:#8080ff">
 	 {{selectedMatch.score}} 
 	  </md-content>
 	  </md-card>
 	   <md-card>
-	  <img src="{{auth.profile.picture}}" />
+	   <img src="{{auth.profile.picture}}" />
 	  </md-card>
 	  <md-card>
-	  <md-content style="background:#ffccff" ng-cloak >
+	  <md-content  style="background:#8080ff" ng-cloak >
 		$ : {{user.coins}}
-		<md-divider/>
 		$Avlbl: {{user.coins -user.coinslocked}}
 	  </md-content>
 	  </md-card>
@@ -98,14 +95,15 @@
 </md-list>
 </md-content> -->
 	<md-divider/>
-Match Bets
+Challenge Bets 
 <md-content>  
     <md-grid-list 
-        md-cols-gt-md="5" md-cols-sm="2" md-cols-md="2"
-        md-row-height-gt-md="2:1" 
+        md-cols-gt-md="6" md-cols-sm="2" md-cols-md="2"
+        md-row-height-gt-md="2:1.2" 
         md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height:500px;width:1200px;background:#e6faff" >
       <md-grid-tile style="background:#b3f0ff"
           ng-repeat="bet in bets">
+		   <div layout="column">
           <md-label>
 		  {{bet.subject}} {{bet.optimistic ? 'Will' : 'Will Not'}} {{bet.topicname}} {{bet.val}}
 		  </md-label>
@@ -121,23 +119,25 @@ Match Bets
 		</div>
 		
 		</form>
+		</div>
       </md-grid-tile>
     </md-grid-list>
 	
 </md-content>
 </div>
 <md-divider/>
-<div layout="flex">
+<div layout="row" style="background:#b3f0ff">
 
-<div layout="column">
-My Unmatched Bets 
+<div layout="column" >
+My Unchallenged Bets 
 <md-content style="background:#b3f0ff" >  
 <md-grid-list 
         md-cols-gt-md="3" md-cols-sm="3" md-cols-md="8"
-        md-row-height-gt-md="3:2" 
-        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height:400px;width:600px;" >
+        md-row-height-gt-md="2:1.2" 
+        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height:400px;width:570px;" >
       <md-grid-tile style="background:#e6faff"
-          ng-repeat="mybet in mybets" layout="column">
+          ng-repeat="mybet in mybets">
+		  <div layout="column">
          <md-label>
 		  {{mybet.subject}} {{mybet.optimistic ? 'Will' : 'Will Not'}} {{mybet.topicname}} {{mybet.val}}
 		   </md-label>
@@ -153,6 +153,7 @@ My Unmatched Bets
 		</div>
 		
 		</form>
+		</div>
 		
       </md-grid-tile>
     </md-grid-list>
@@ -160,21 +161,25 @@ My Unmatched Bets
 </div >
 
 <div>
- My matched Bets
+ My Challenged Bets
+ <md-content style="background:#b3f0ff" >  
 <md-grid-list  
         md-cols-gt-md="3" md-cols-sm="3" md-cols-md="8"
-        md-row-height-gt-md="2:1" 
-        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height400px;width:600px;background:#b3f0ff">
+        md-row-height-gt-md=2:1.2" 
+        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height400px;width:570px;">
       <md-grid-tile style="background:#e6faff"
           ng-repeat="myMatched in myMatchedbets">
+		 <div layout="column">
          <md-label>
 		  {{myMatched.subject}} {{myMatched.opt}} {{myMatched.topic}} {{myMatched.val}}
 		  </md-label>
 		   <md-label>
 		  {{ myMatched.result}}
 		  </md-label> 
+		  </div>
       </md-grid-tile>
     </md-grid-list> 
+	</md-content >  
 </div>
 
 </div>
