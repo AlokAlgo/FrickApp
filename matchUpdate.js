@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test');
 var Match = require('./models/match');
 var News =  require('./models/news');
-var external_id = '951335';
+var external_id = '951341';
 
 var options = {
   host: 'cricscore-api.appspot.com',
