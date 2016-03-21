@@ -4,7 +4,29 @@ angular.module( 'frickapp.home', [
   'angular-jwt'
 ]).
 controller( 'HomeCtrl', function HomeController( $scope, auth, $http, $location, store, $interval) {
-	$scope.serverIp = $scope.serverIp || '104.196.96.128';
+	$scope.data = {
+                selectedIndex: 0,
+                secondLocked:  true,
+                secondLabel:   "2",
+                bottom:        false
+             };
+             $scope.next = function() {
+                $scope.data.selectedIndex = Math.min($scope.data.selectedIndex + 1, 2) ;
+             };
+             $scope.previous = function() {
+                $scope.data.selectedIndex = Math.max($scope.data.selectedIndex - 1, 0);
+             };
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	$scope.serverIp = $scope.serverIp || 'localhost';
 	$scope.user=$scope.user || {};
 	store.set('token', auth.idToken);
 	$scope.bets = $scope.bets || [];

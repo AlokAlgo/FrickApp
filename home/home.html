@@ -1,4 +1,4 @@
-<div layout="flex" >
+<div layout="row" >
 <div layout="column" layout-fill>
   <md-toolbar>
     <div class="md-toolbar-tools">
@@ -78,110 +78,99 @@
 		</div>
 
 
-<div style="background:#e6faff">
-<!--  Chat window removing for now will be introduced again thr menu options
-<md-content layout="column">
-<form ng-submit="submit()">
-			<input type="text" ng-model="text" name="text" style="height:40px;width:300px;" />
-			<input type="submit" id="submit" value="Submit" style="
-	height:40px;
-	width:80px;
-    border:1px solid #000;"/>
-</form>
-<md-list  >
-  <md-list-item class="md-2-line" ng-repeat="message in messages">
-      <h3>{{message}}</h3>
-  </md-list-item>
-</md-list>
-</md-content> -->
-	<md-divider/>
-Challenge Bets 
-<md-content>  
-    <md-grid-list 
+
+<md-divider/>
+<div id="tabContainer"  ng-cloak >
+         <md-content style="height:1000px;width:1150px;">
+            <md-tabs style="height:1000px;width:1150px;"  md-selected="data.selectedIndex" md-align-tabs="{{data.bottom ? 'bottom' : 'top'}}">
+               <md-tab id="tab1">
+                  <md-tab-label>Challenge</md-tab-label>
+                  <md-tab-body>
+				  <md-content style="height:1000px;width:1150px;background:#e6faff">
+    <md-grid-list
         md-cols-gt-md="6" md-cols-sm="2" md-cols-md="2"
-        md-row-height-gt-md="2:1.2" 
-        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height:500px;width:1200px;background:#e6faff" >
+        md-row-height-gt-md="2:1.2"
+        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height:1000px;width:1100px;background:#e6faff" >
       <md-grid-tile style="background:#b3f0ff"
           ng-repeat="bet in bets">
-		   <div layout="column">
+                   <div layout="column">
           <md-label>
-		  {{bet.subject}} {{bet.optimistic ? 'Will' : 'Will Not'}} {{bet.topicname}} {{bet.val}}
-		  </md-label>
-		  <md-label>
-		   Your Risk:{{ bet.coinstake }} Reward:{{ bet.coinsgive}}
-		  </md-label>
-		  <form class="form-horizontal" role="form" ng-submit="challengeBet(bet)">
-		<div class="form-group">								
-		<div style="padding-left:10px">
-			<md-button type="submit" style="background:#8080ff" value="Publish" class="md-raised">Challenge
-			</md-button>
-		</div>
-		</div>
-		
-		</form>
-		</div>
+                  {{bet.subject}} {{bet.optimistic ? 'Will' : 'Will Not'}} {{bet.topicname}} {{bet.val}}
+                  </md-label>
+                  <md-label>
+                   Your Risk:{{ bet.coinstake }} Reward:{{ bet.coinsgive}}
+                  </md-label>
+                  <form class="form-horizontal" role="form" ng-submit="challengeBet(bet)">
+                <div class="form-group">
+                <div style="padding-left:10px">
+                        <md-button type="submit" style="background:#8080ff" value="Publish" class="md-raised">Challenge
+                        </md-button>
+                </div>
+                </div>
+                </form>
+                </div>
       </md-grid-tile>
     </md-grid-list>
-	
 </md-content>
-</div>
-<md-divider/>
-<div layout="row" style="background:#b3f0ff">
-
-<div layout="column" >
-My Unchallenged Bets 
-<md-content style="background:#b3f0ff" >  
-<md-grid-list 
+	</md-tab-body>
+               </md-tab>
+               <md-tab id="tab2" ng-disabled="data.secondLocked">
+                  <md-tab-label>Cancel</md-tab-label>
+                  <md-tab-body><md-content style="background:#b3f0ff" >
+<md-grid-list
         md-cols-gt-md="3" md-cols-sm="3" md-cols-md="8"
-        md-row-height-gt-md="2:1.2" 
+        md-row-height-gt-md="2:1.2"
         md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height:400px;width:570px;" >
       <md-grid-tile style="background:#e6faff"
           ng-repeat="mybet in mybets">
-		  <div layout="column">
+                  <div layout="column">
          <md-label>
-		  {{mybet.subject}} {{mybet.optimistic ? 'Will' : 'Will Not'}} {{mybet.topicname}} {{mybet.val}}
-		   </md-label>
-		    <md-label>
-		   My Risk:{{ mybet.coinsgive }}  Reward : {{ mybet.coinstake }} 
-		  </md-label>
-		   <form class="form-horizontal" role="form" ng-submit="cancelBet(mybet._id)">
-		<div class="form-group">								
-		<div style="padding-left:10px">
-			<md-button type="submit" style="background:#8080ff" value="Cancel" class="md-raised">Cancel
-			</md-button>
-		</div>
-		</div>
-		
-		</form>
-		</div>
-		
+                  {{mybet.subject}} {{mybet.optimistic ? 'Will' : 'Will Not'}} {{mybet.topicname}} {{mybet.val}}
+                   </md-label>
+                    <md-label>
+                   My Risk:{{ mybet.coinsgive }}  Reward : {{ mybet.coinstake }}
+                  </md-label>
+                   <form class="form-horizontal" role="form" ng-submit="cancelBet(mybet._id)">
+                <div class="form-group">
+                <div style="padding-left:10px">
+                        <md-button type="submit" style="background:#8080ff" value="Cancel" class="md-raised">Cancel
+                        </md-button>
+                </div>
+                </div>
+                </form>
+                </div>
       </md-grid-tile>
     </md-grid-list>
-	</md-content >  
-</div >
-
-<div>
- My Challenged Bets
- <md-content style="background:#b3f0ff" >  
-<md-grid-list  
+        </md-content >
+				  </md-tab-body>
+               </md-tab>
+               <md-tab id="tab3">
+                  <md-tab-label>Matched</md-tab-label>
+                  <md-tab-body>
+				 <md-content style="background:#b3f0ff" >
+		<md-grid-list
         md-cols-gt-md="3" md-cols-sm="3" md-cols-md="8"
-        md-row-height-gt-md=2:1.2" 
+        md-row-height-gt-md=2:1.2"
         md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height400px;width:570px;">
       <md-grid-tile style="background:#e6faff"
           ng-repeat="myMatched in myMatchedbets">
-		 <div layout="column">
+                 <div layout="column">
          <md-label>
-		  {{myMatched.subject}} {{myMatched.opt}} {{myMatched.topic}} {{myMatched.val}}
-		  </md-label>
-		   <md-label>
-		  {{ myMatched.result}}
-		  </md-label> 
-		  </div>
+                  {{myMatched.subject}} {{myMatched.opt}} {{myMatched.topic}} {{myMatched.val}}
+                  </md-label>
+                   <md-label>
+                  {{ myMatched.result}}
+                  </md-label>
+                  </div>
       </md-grid-tile>
-    </md-grid-list> 
-	</md-content >  
-</div>
-
-</div>
-			
+    </md-grid-list>
+        </md-content >
+				  </md-tab-body>
+               </md-tab>
+            </md-tabs>
+         </md-content>
+         <div class="md-padding" layout="row" layout-sm="column" layout-align="left center" style="padding-top: 0;">
+            <md-checkbox ng-model="data.secondLocked" aria-label="Disable tab 2?" style="margin: 5px;">Disable tab 2?</md-checkbox>
+            <md-checkbox ng-model="data.bottom" aria-label="Align tabs to bottom?" style="margin: 5px;">Align tabs to bottom?</md-checkbox>
+         </div>
 </div>
