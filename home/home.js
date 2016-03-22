@@ -8,8 +8,6 @@ controller( 'HomeCtrl', function HomeController( $scope, auth, $http, $location,
 	
 	$scope.data = {
                 selectedIndex: 0,
-                secondLocked:  false,
-                secondLabel:   "2",
                 bottom:        false
              };
              $scope.next = function() {

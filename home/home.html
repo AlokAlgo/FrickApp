@@ -1,4 +1,4 @@
-<div layout="row" >
+<div style="background:#e6faff">
 <div layout="column" layout-fill>
   <md-toolbar>
     <div class="md-toolbar-tools">
@@ -57,7 +57,7 @@
 		<input type="number"  ng-model="val" placeholder = "Enter Val">
 		</md-input-container>
 		</div>
-		<div layout="row">
+		<div layout="row" style="background:#e6faff">
 		<md-input-container>
 		<input type="number"  ng-model="coinsgive" placeholder = "risk coins">
 		</md-input-container>
@@ -75,22 +75,19 @@
 		</div>
 		
 		</form>
-		</div>
-
-
-
+	</div>
 <md-divider/>
 <div id="tabContainer"  ng-cloak >
-         <md-content style="height:1000px;width:1150px;">
-            <md-tabs style="height:1000px;width:1150px;"  md-selected="data.selectedIndex" md-align-tabs="{{data.bottom ? 'bottom' : 'top'}}">
+         <md-content>
+            <md-tabs  md-dynamic-height  class="md-accent" md-selected="data.selectedIndex" md-align-tabs="{{data.bottom ? 'bottom' : 'top'}}" flex>
                <md-tab id="tab1">
                   <md-tab-label>Challenge</md-tab-label>
                   <md-tab-body>
-				  <md-content style="height:1000px;width:1150px;background:#e6faff">
+				  <md-content style="background:#e6faff">
     <md-grid-list
         md-cols-gt-md="6" md-cols-sm="2" md-cols-md="2"
         md-row-height-gt-md="2:1.2"
-        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height:1000px;width:1100px;background:#e6faff" >
+        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height:750px;width:1100px;background:#e6faff" >
       <md-grid-tile style="background:#b3f0ff"
           ng-repeat="bet in bets">
                    <div layout="column">
@@ -118,9 +115,9 @@
                   <md-tab-label>Cancel</md-tab-label>
                   <md-tab-body><md-content style="background:#b3f0ff" >
 <md-grid-list
-        md-cols-gt-md="3" md-cols-sm="3" md-cols-md="8"
+        md-cols-gt-md="6" md-cols-sm="3" md-cols-md="8"
         md-row-height-gt-md="2:1.2"
-        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height:400px;width:570px;" >
+        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px"  >
       <md-grid-tile style="background:#e6faff"
           ng-repeat="mybet in mybets">
                   <div layout="column">
@@ -149,9 +146,9 @@
                   <md-tab-body>
 				 <md-content style="background:#b3f0ff" >
 		<md-grid-list
-        md-cols-gt-md="3" md-cols-sm="3" md-cols-md="8"
+        md-cols-gt-md="6" md-cols-sm="3" md-cols-md="8"
         md-row-height-gt-md=2:1.2"
-        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height400px;width:570px;">
+        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px">
       <md-grid-tile style="background:#e6faff"
           ng-repeat="myMatched in myMatchedbets">
                  <div layout="column">
@@ -169,8 +166,5 @@
                </md-tab>
             </md-tabs>
          </md-content>
-         <div class="md-padding" layout="row" layout-sm="column" layout-align="left center" style="padding-top: 0;">
-            <md-checkbox ng-model="data.secondLocked" aria-label="Disable tab 2?" style="margin: 5px;">Disable tab 2?</md-checkbox>
-            <md-checkbox ng-model="data.bottom" aria-label="Align tabs to bottom?" style="margin: 5px;">Align tabs to bottom?</md-checkbox>
-         </div>
+</div>
 </div>
