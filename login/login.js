@@ -2,7 +2,28 @@ angular.module( 'frickapp.login', [
   'auth0'
 ])
 .controller( 'LoginCtrl', function LoginController( $scope, auth, $location, store ) {
-  $scope.login = function() {
+ 
+
+
+
+
+
+
+$scope.data = {
+                selectedIndex: 0,
+                bottom:        false
+             };
+             $scope.next = function() {
+                $scope.data.selectedIndex = Math.min($scope.data.selectedIndex + 1, 2) ;
+             };
+             $scope.previous = function() {
+                $scope.data.selectedIndex = Math.max($scope.data.selectedIndex - 1, 0);
+             };
+
+
+
+
+ $scope.login = function() {
 	  var lock = new Auth0Lock('DmK2KHCxcpTPMNXdAl7kYun2vkC1EBH8', 'cricchat.auth0.com');
 	//  lock.show();
         var result = lock.parseHash();
@@ -13,7 +34,6 @@ angular.module( 'frickapp.login', [
 
   if (result && result.id_token) {
     lock.getProfile(result.id_token, function (err, profile) {
-      alert('hello ' + profile.name);
 	  store.set('hash', result);
 	  store.set('token', result.id_token);
       $location.path("/");
