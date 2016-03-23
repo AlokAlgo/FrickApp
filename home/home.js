@@ -5,6 +5,11 @@ angular.module( 'frickapp.home', [
 ]).
 controller( 'HomeCtrl', function HomeController( $scope, auth, $http, $location, store, $interval) {
 	
+
+	/*$scope.info = function (message) {
+        //var message = '<strong>Heads up!</strong> This alert needs your attention, but it\'s not super important.';
+        Flash.create('info', message);
+    }; */
 	
 	$scope.data = {
                 selectedIndex: 0,
@@ -17,7 +22,7 @@ controller( 'HomeCtrl', function HomeController( $scope, auth, $http, $location,
                 $scope.data.selectedIndex = Math.max($scope.data.selectedIndex - 1, 0);
              };
 	
-	$scope.serverIp = $scope.serverIp || '104.196.96.128';
+	$scope.serverIp = $scope.serverIp || 'localhost';
 	$scope.user=$scope.user || {};
 	store.set('token', auth.idToken);
 	$scope.bets = $scope.bets || [];
@@ -25,6 +30,7 @@ controller( 'HomeCtrl', function HomeController( $scope, auth, $http, $location,
 	$scope.matches = $scope.matches || [];
 	$scope.suggestions = $scope.suggestions || [];
 	$scope.myMatchedbets =  $scope.myMatchedbets || [];
+	$scope.mySettledbets =  $scope.mySettledbets || [];
 	
 $scope.populateMyBets = function() {
 		$scope.mybets = [];
@@ -53,7 +59,8 @@ $scope.populateMyMatchedBets = function() {
 											match_user_id: $scope.user.user_id
 											}
 										  ],
-											match_id: $scope.selectedMatch._id
+											match_id: $scope.selectedMatch._id,
+											settled : false
 										});
 		var url = 'http://'+$scope.serverIp +':3002/api/v1/MatchedBet'+ '?query= ' + query;
 		console.log(url);
@@ -66,11 +73,44 @@ $scope.populateMyMatchedBets = function() {
 					bet.subject =  newsType.slice(0,pos);
 					bet.topic = newsType.slice(pos+1,newsType.length);
 					bet.opt = bet.optimistic_user_id == $scope.user.user_id ? 'Will' : 'Will Not';
-					if (bet.settled) {
+				/*	if (bet.settled) {
 						bet.result =  'Settled';
 					} else {
 						bet.result = 'Yet to be settled';
-					}
+					} */
+				});
+            }) 
+       .error( function(data, status, headers, config){
+               // alert(data+ status);// play here
+				
+            });
+		}	 // end if		
+      };
+	  $scope.populateMySettledBets = function() {
+		$scope.myMatchedbets = [];
+		if($scope.selectedMatch) {
+			var query = JSON.stringify({
+									$or: [{
+											win_user_id: $scope.user.user_id
+											},
+											{
+											loose_user_id: $scope.user.user_id
+											}
+										  ],
+											match_id: $scope.selectedMatch._id
+										});
+		var url = 'http://'+$scope.serverIp +':3002/api/v1/SettledBet'+ '?query= ' + query;
+		console.log(url);
+        $http.get(url).success(
+            function(data, status, headers, config){
+				$scope.mySettledbets=data;
+				$scope.mySettledbets.forEach(function(bet) {
+					var pos = bet.newsType.lastIndexOf(" ");
+					var newsType = bet.newsType;
+					bet.subject =  newsType.slice(0,pos);
+					bet.topic = newsType.slice(pos+1,newsType.length);
+					bet.opt = bet.optimistic_user_id == $scope.user.user_id ? 'Will' : 'Will Not';
+					bet.result =  bet.win_user_id == $scope.user.user_id ? 'You Won ' + bet.coins + ' CricCoins' : 'You Lost ' + bet.coins  + ' CricCoins';
 				});
             }) 
        .error( function(data, status, headers, config){
@@ -95,6 +135,7 @@ $scope.getUser = function()
             $scope.user= data;
 			$scope.populateMyBets();
 			$scope.populateMyMatchedBets();
+			$scope.populateMySettledBets();
 			console.log(data);
         })
 };
@@ -266,19 +307,21 @@ var data =
        
 		console.log(data);
         $http.post(url, data).success(function(data, status) {
-           alert("You have succesfully created the counter bet You page will refresh shortly");
+           $scope.info("You have succesfully created the counter bet You page will refresh shortly");
         })
 };
 //$scope.selectedMatch = {};	
 $scope.populateBets();
 $scope.refresh = function() {
 	
-	$scope.populateBets();
-	$scope.populateMyMatchedBets();
-	$scope.populateMyBets();
+	
 	$scope.getUser();
 	if ($scope.selectedMatch !=null) {
 	$scope.updateSelectedMatchScore($scope.selectedMatch._id);
+	$scope.populateBets();
+	$scope.populateMyMatchedBets();
+	$scope.populateMyBets();
+	$scope.populateMySettledBets();
 	}
 }
 

@@ -4,28 +4,21 @@
     <div class="md-toolbar-tools">
       <div>CricCoins </div>
       <!-- fill up the space between left and right area -->
-      <span flex>
-	  <md-input-container>
-	  <md-select ng-model="selectedMatch" ng-change="populateSuggestions()" placeholder="Select a Match">
-      <md-option ng-value="match" ng-repeat="match in  matches">{{ match.name }}</md-option>
-      </md-select>
-	  </md-input-container>
-	  
-	  </span>
-	   <md-card >
-	  <md-content style="background:#8080ff">
-	 {{selectedMatch.score}} 
-	  </md-content>
-	  </md-card>
-	   <md-card>
+	    <md-card>
 	   <img src="{{auth.profile.picture}}" />
 	  </md-card>
-	  <md-card>
-	  <md-content  style="background:#8080ff" ng-cloak >
-		$ : {{user.coins}}
-		$Avlbl: {{user.coins -user.coinslocked}}
+	  
+      <span flex>
+	  <md-content  style="background:#ff3399" ng-cloak >
+		{{auth.profile.name}} you have
+		 {{user.coins}} CricCoins, blocked for bets 
+		 {{user.coinslocked}}, available {{user.coins - user.coinslocked}}
 	  </md-content>
-	  </md-card>
+	 
+	  </span>
+	  <span flex>
+	  </span>
+	 
       <md-menu-bar>
 	<md-menu>
 	<button ng-click="$mdOpenMenu()">
@@ -47,14 +40,21 @@
 
 </div>
 <md-divider/>
+	<div layout="row">
+	
+	<div layout="column">
 	<div layout="row" style="background:#e6faff">
-
-	<md-autocomplete  ngRequired="Please Enter" md-selected-item="selectedSuggestion" md-search-text="searchText" md-items="suggestion in getMatches(searchText)" md-item-text="suggestion.text" placeholder="Select Match and type">
+	 <md-input-container>
+	  <md-select ng-model="selectedMatch" ng-change="populateSuggestions()" placeholder="Select a Match">
+      <md-option ng-value="match" ng-repeat="match in  matches">{{ match.name }}</md-option>
+      </md-select>
+	  </md-input-container>
+	<md-autocomplete  ngRequired="Please Enter" md-selected-item="selectedSuggestion" md-search-text="searchText" md-items="suggestion in getMatches(searchText)" md-item-text="suggestion.text" placeholder="and start typing here">
 			<span md-highlight-text="searchText">{{suggestion.text}}</span>
 			</md-autocomplete>
 			
 		<md-input-container>
-		<input type="number"  ng-model="val" placeholder = "Enter Val">
+		<input type="number"  ng-model="val" placeholder = "Val for score etc">
 		</md-input-container>
 		</div>
 		<div layout="row" style="background:#e6faff">
@@ -69,12 +69,27 @@
 		<form class="form-horizontal" role="form" ng-submit="addRow(searchText)">
 		<div class="form-group">								
 		<div style="padding-left:10px">
-			<md-button type="submit" value="Publish" class="md-raised" style="background:#8080ff">Publish
+			<md-button type="submit" value="Publish" class="md-raised" style="background:#8080ff"><i class="fa fa-send fa-fw"></i>Publish
 			</md-button>
 		</div>
 		</div>
 		
 		</form>
+		
+	</div>
+	
+	</div>
+	<span style="background:#e6faff" flex >
+	  <md-content style="background:#e6faff;height: 100%;">
+	 <i class="fa fa-newspaper-o fa-fw"></i><label class="active" style="font-size:160%" >{{selectedMatch.score}} </label>
+	  </md-content>
+	  </span>
+	  <span style="background:#e6faff" flex>
+	   <md-content style="background:#e6faff;height: 100%;">
+		<i class="fa fa-info-circle fa-fw"></i><label class="active" > To create a bet, select a match, start typing player
+	  team powerplay names etc in the adjacent box, enter a value for score or runs in ajacent box (not needed for win/loose type of bets), enter the coins you want to risk and coins you want as reward and publish </label>
+	  </md-content>
+	  </span>
 	</div>
 <md-divider/>
 <div id="tabContainer"  ng-cloak >
@@ -86,7 +101,7 @@
 				  <md-content style="background:#e6faff">
     <md-grid-list
         md-cols-gt-md="6" md-cols-sm="2" md-cols-md="2"
-        md-row-height-gt-md="2:1.2"
+        md-row-height-gt-md="2:1.4"
         md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height:750px;width:1100px;background:#e6faff" >
       <md-grid-tile style="background:#b3f0ff"
           ng-repeat="bet in bets">
@@ -100,7 +115,7 @@
                   <form class="form-horizontal" role="form" ng-submit="challengeBet(bet)">
                 <div class="form-group">
                 <div style="padding-left:10px">
-                        <md-button type="submit" style="background:#8080ff" value="Publish" class="md-raised">Challenge
+                        <md-button type="submit" style="background:#8080ff" value="Publish" class="md-raised"><i class="fa fa-trophy fa-fw"></i>Challenge
                         </md-button>
                 </div>
                 </div>
@@ -116,7 +131,7 @@
                   <md-tab-body><md-content style="background:#b3f0ff" >
 <md-grid-list
         md-cols-gt-md="6" md-cols-sm="3" md-cols-md="8"
-        md-row-height-gt-md="2:1.2"
+        md-row-height-gt-md="2:1.4"
         md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px"  >
       <md-grid-tile style="background:#e6faff"
           ng-repeat="mybet in mybets">
@@ -130,7 +145,7 @@
                    <form class="form-horizontal" role="form" ng-submit="cancelBet(mybet._id)">
                 <div class="form-group">
                 <div style="padding-left:10px">
-                        <md-button type="submit" style="background:#8080ff" value="Cancel" class="md-raised">Cancel
+                        <md-button type="submit" style="background:#8080ff" value="Cancel" class="md-raised"><i class="fa fa-trash-o fa-fw"></i> Cancel
                         </md-button>
                 </div>
                 </div>
@@ -157,6 +172,29 @@
                   </md-label>
                    <md-label>
                   {{ myMatched.result}}
+                  </md-label>
+                  </div>
+      </md-grid-tile>
+    </md-grid-list>
+        </md-content >
+				  </md-tab-body>
+               </md-tab>
+			    <md-tab id="tab4">
+                  <md-tab-label>Settled</md-tab-label>
+                  <md-tab-body>
+				 <md-content style="background:#b3f0ff" >
+		<md-grid-list
+        md-cols-gt-md="6" md-cols-sm="3" md-cols-md="8"
+        md-row-height-gt-md=2:1.2"
+        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px">
+      <md-grid-tile style="background:#e6faff"
+          ng-repeat="mySettled in mySettledbets">
+                 <div layout="column">
+         <md-label>
+                  {{mySettled.subject}} {{mySettled.opt}} {{mySettled.topic}} {{mySettled.val}}
+                  </md-label>
+                   <md-label>
+                  {{ mySettled.result}}
                   </md-label>
                   </div>
       </md-grid-tile>
