@@ -45,8 +45,16 @@ newsSchema.post('save', function(doc) {
 		
 		// now settle the bet
 			var pessimistId = bet.create_user_id == bet.optimistic_user_id ? bet.match_user_id : bet.create_user_id;
+			var winner;
+			var looser;
+			if (bet.val) {
 			var winner = doc.val >= bet.val ? bet.optimistic_user_id : pessimistId;
 			var looser = doc.val >= bet.val ? pessimistId : bet.optimistic_user_id;
+			} else {
+				winner = doc.val == 'true' ? bet.optimistic_user_id : pessimistId;
+				looser = doc.val == 'true' ? pessimistId : bet.optimistic_user_id;
+			}
+			
 			var settledbet = new  SettledBet(
 			{
 				match_id : bet.match_id,
@@ -59,7 +67,7 @@ newsSchema.post('save', function(doc) {
 				coins : doc.create_user_id == winner ? bet.coinstake : bet.coinsgive,
 				resultVal : doc.val,
 				newsType : doc.newsType,
-				val : bet.val
+				val : bet.val ? bet.val : ' '
 			});
 			settledbet.save(function(err,setbet) {
 				if (err)
