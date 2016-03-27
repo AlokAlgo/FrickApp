@@ -6,10 +6,10 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test');
 var Match = require('./models/match');
 var News =  require('./models/news');
-var external_id = '951347';
+var external_id = '951363';
 function updateMatch() {
 	
-request('http://www.espncricinfo.com/ci/engine/match/951353.html', function (error, response, html) {
+request('http://www.espncricinfo.com/icc-world-twenty20-2016/engine/match/951363.html', function (error, response, html) {
 	
   if (!error && response.statusCode == 200) {
 	var $ = cheerio.load(html);
