@@ -6,10 +6,10 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test');
 var Match = require('./models/match');
 var News =  require('./models/news');
-var external_id = '951363';
+var external_id = '951371';
 function updateMatch() {
 	
-request('http://www.espncricinfo.com/icc-world-twenty20-2016/engine/match/951363.html', function (error, response, html) {
+request('http://www.espncricinfo.com/icc-world-twenty20-2016/engine/match/951371.html', function (error, response, html) {
 	
   if (!error && response.statusCode == 200) {
 	var $ = cheerio.load(html);
@@ -69,4 +69,4 @@ request('http://www.espncricinfo.com/icc-world-twenty20-2016/engine/match/951363
 } //end function
 }); // end request
 } // end update Match
-setInterval(updateMatch,10000);
+setInterval(updateMatch,20000);
