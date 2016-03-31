@@ -8,20 +8,20 @@
 	   <img src="{{auth.profile.picture}}" />
 	   </md-card>
 	  
-      <span flex>
-	  <md-content  style="background:#ff3399" ng-cloak >
-		{{auth.profile.name}} you have
-		 {{user.coins}} CricCoins, blocked for bets 
-		 {{user.coinslocked}}, available {{user.coins - user.coinslocked}}
+      <span display="block" flex >
+	  <md-content  style="background:#e6eeff" ng-cloak >
+		 {{auth.profile.name}} CricCoins: {{user.coins}} 
+		   Blocked:  {{user.coinslocked}}   
+		  Available: {{user.coins - user.coinslocked}}
 	  </md-content>
 	 
 	  </span>
 	  <span flex>
-	   <md-content  style="background:#8080ff">
-	      "     Quiet the mind, and the soul will speak.”
+	   <!--<md-content  style="background:#e6faff">
+	      "Quiet the mind, and the soul will speak.”
 		  <br>
 		  "Albert Picasso"
-	   </md-content>
+	   </md-content> -->
 	  </span>
 	 
       <md-menu-bar>
@@ -31,10 +31,10 @@
 	</button>
    <md-menu-content>
    <md-menu-item>
-     <md-button  style="background:#8080ff" ng-click="logout()" ng-model="settings.logout">Logout</md-button>
+     <md-button  style="background:#0033cc" ng-click="logout()" ng-model="settings.logout">Logout</md-button>
 	</md-menu-item>
 	 <md-menu-item>
-     <md-button  style="background:#8080ff" ng-click="admin()" ng-model="settings.logout">Admin</md-button>
+     <md-button  style="background:#0033cc" ng-click="admin()" ng-model="settings.logout">Admin</md-button>
 	</md-menu-item>
    </md-menu-content>
  </md-menu>
@@ -86,7 +86,7 @@
 	</div>
 	<span style="background:#e6faff" flex >
 	  <md-content style="background:#e6faff;height: 100%;">
-	 <i class="fa fa-newspaper-o fa-fw"></i><label class="active" style="font-size:160%" >{{selectedMatch.score}} </label>
+	 <i class="fa fa-newspaper-o fa-fw"></i><label class="active" style="font-size:100%" >{{selectedMatch.score}} </label>
 	  </md-content>
 	  </span>
 	  <span style="background:#e6faff" flex>
@@ -99,16 +99,16 @@
 <md-divider/>
 <div id="tabContainer"  ng-cloak >
          <md-content>
-            <md-tabs  md-dynamic-height  class="md-accent" md-selected="data.selectedIndex" md-align-tabs="{{data.bottom ? 'bottom' : 'top'}}" flex>
+            <md-tabs  md-dynamic-height  class="md-primary" style="background:#e6eeff" md-selected="data.selectedIndex" md-align-tabs="{{data.bottom ? 'bottom' : 'top'}}" flex>
                <md-tab id="tab1">
                   <md-tab-label>Challenge</md-tab-label>
                   <md-tab-body>
-				  <md-content style="background:#e6faff">
+				  <md-content style="background:#e6eeff">
     <md-grid-list
         md-cols-gt-md="6" md-cols-sm="2" md-cols-md="2"
         md-row-height-gt-md="2:1.4"
-        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height:750px;width:1100px;background:#e6faff" >
-      <md-grid-tile style="background:#b3f0ff"
+        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height:750px;width:1100px;background:#e6eeff" >
+      <md-grid-tile style="background:#e6faff"
           ng-repeat="bet in bets">
                    <div layout="column">
           <md-label>
@@ -133,11 +133,12 @@
                </md-tab>
                <md-tab id="tab2" ng-disabled="data.secondLocked">
                   <md-tab-label>Cancel</md-tab-label>
-                  <md-tab-body><md-content style="background:#b3f0ff" >
-<md-grid-list
-        md-cols-gt-md="6" md-cols-sm="3" md-cols-md="8"
+                   <md-tab-body>
+				  <md-content style="background:#e6eeff">
+    <md-grid-list
+        md-cols-gt-md="6" md-cols-sm="2" md-cols-md="2"
         md-row-height-gt-md="2:1.4"
-        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px"  >
+        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height:750px;width:1100px;background:#e6eeff" >
       <md-grid-tile style="background:#e6faff"
           ng-repeat="mybet in mybets">
                   <div layout="column">
@@ -164,19 +165,20 @@
                <md-tab id="tab3">
                   <md-tab-label>Matched</md-tab-label>
                   <md-tab-body>
-				 <md-content style="background:#b3f0ff" >
-		<md-grid-list
-        md-cols-gt-md="6" md-cols-sm="3" md-cols-md="8"
-        md-row-height-gt-md=2:1.2"
-        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px">
+				  <md-content style="background:#e6eeff">
+    <md-grid-list
+        md-cols-gt-md="6" md-cols-sm="2" md-cols-md="2"
+        md-row-height-gt-md="2:1.2"
+        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height:750px;width:1100px;background:#e6eeff" >
       <md-grid-tile style="background:#e6faff"
           ng-repeat="myMatched in myMatchedbets">
                  <div layout="column">
          <md-label>
                   {{myMatched.subject}} {{myMatched.opt}} {{myMatched.topic}} {{myMatched.val}}
                   </md-label>
-                   <md-label>
-                  {{ myMatched.result}}
+                  
+				   <md-label>
+                   My Risk:{{ myMatched.riskCoins }}  Reward : {{ myMatched.rewardCoins }}
                   </md-label>
                   </div>
       </md-grid-tile>
@@ -186,12 +188,12 @@
                </md-tab>
 			    <md-tab id="tab4">
                   <md-tab-label>Settled</md-tab-label>
-                  <md-tab-body>
-				 <md-content style="background:#b3f0ff" >
-		<md-grid-list
-        md-cols-gt-md="6" md-cols-sm="3" md-cols-md="8"
-        md-row-height-gt-md=2:1.2"
-        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px">
+                   <md-tab-body>
+				  <md-content style="background:#e6eeff">
+    <md-grid-list
+        md-cols-gt-md="6" md-cols-sm="2" md-cols-md="2"
+        md-row-height-gt-md="2:1.4"
+        md-gutter-gt-md="16px" md-gutter-gt-sm="8px" md-gutter="4px" style="height:750px;width:1100px;background:#e6eeff" >
       <md-grid-tile style="background:#e6faff"
           ng-repeat="mySettled in mySettledbets">
                  <div layout="column">

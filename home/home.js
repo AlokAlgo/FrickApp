@@ -22,7 +22,8 @@ controller( 'HomeCtrl', function HomeController( $scope, auth, $http, $location,
                 $scope.data.selectedIndex = Math.max($scope.data.selectedIndex - 1, 0);
              };
 	
-	$scope.serverIp = $scope.serverIp || '104.196.96.128';
+	//$scope.serverIp = $scope.serverIp || '104.196.96.128';
+	$scope.serverIp = $scope.serverIp || 'localhost';
 	$scope.user=$scope.user || {};
 	store.set('token', auth.idToken);
 	$scope.bets = $scope.bets || [];
@@ -73,6 +74,8 @@ $scope.populateMyMatchedBets = function() {
 					bet.subject =  newsType.slice(0,pos);
 					bet.topic = newsType.slice(pos+1,newsType.length);
 					bet.opt = bet.optimistic_user_id == $scope.user.user_id ? 'Will' : 'Will Not';
+					bet.riskCoins = bet.create_user_id == $scope.user.user_id  ? bet.coinsgive : bet.coinstake;
+					bet.rewardCoins = bet.create_user_id == $scope.user.user_id  ? bet.coinstake : bet.coinsgive;
 				/*	if (bet.settled) {
 						bet.result =  'Settled';
 					} else {

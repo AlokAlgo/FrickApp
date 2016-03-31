@@ -32,7 +32,7 @@ newsSchema.post('save', function(doc) {
 		query.where('newsType', doc.newsType).where('settled', false).
 		 where('match_id', doc.match_id);
 	} else {
-		query.where('newsType', doc.newsType)
+		query.where('newsType', doc.newsType).where('settled', false)
 		 .where('match_id', doc.match_id)
 		.where('val').lte(doc.val);
 	}
