@@ -5,8 +5,8 @@ angular.module( 'frickapp.admin', [
 ]).
 controller( 'AdminCtrl', function AdminController( $scope, auth, $http, $location, store, $interval) {
 	
-	//$scope.serverIp = $scope.serverIp || '104.196.96.128';
-	$scope.serverIp = $scope.serverIp || 'localhost';
+	$scope.serverIp = $scope.serverIp || '104.196.96.128';
+	//$scope.serverIp = $scope.serverIp || 'localhost';
 	$scope.user=$scope.user || {};
 	store.set('token', auth.idToken);
 	$scope.getUser = function() 

@@ -22,8 +22,8 @@ controller( 'HomeCtrl', function HomeController( $scope, auth, $http, $location,
                 $scope.data.selectedIndex = Math.max($scope.data.selectedIndex - 1, 0);
              };
 	
-	//$scope.serverIp = $scope.serverIp || '104.196.96.128';
-	$scope.serverIp = $scope.serverIp || 'localhost';
+	$scope.serverIp = $scope.serverIp || '104.196.96.128';
+//$scope.serverIp = $scope.serverIp || 'localhost';
 	$scope.user=$scope.user || {};
 	store.set('token', auth.idToken);
 	$scope.bets = $scope.bets || [];
