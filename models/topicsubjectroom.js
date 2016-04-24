@@ -29,13 +29,11 @@ var User = require('./user');
 
 topicSchema.post('remove', function(doc) {
 	console.log("bet got deleted ");
-	User.findOne({user_id : doc.create_user_id}, function(err, user) {
-	  if (err) {
-		  console.log(err);
-	  }
-	  user.coinslocked = user.coinslocked - doc.coinsgive;
-	  user.save();
-  });
+    User.findOneAndUpdate({'user_id' : doc.create_user_id}, { $inc: {  coinslocked: -doc.coinsgive  } }, function(err, user) {
+						if (err) {
+							console.log(err);
+						}
+					});
 });
 
 topicSchema.post('save', function(doc) {
@@ -43,13 +41,12 @@ topicSchema.post('save', function(doc) {
   // find if something matches
   // and updae accordingly
   // find the userid and update blocked coins
-  User.findOne({user_id : doc.create_user_id}, function(err, user) {
-	  if (err) {
-		  console.log(err);
-	  }
-	  user.coinslocked = user.coinslocked + doc.coinsgive;
-	  user.save();
-  });
+  // This also shd be findAndUpdate 
+  User.findOneAndUpdate({'user_id' : doc.create_user_id}, { $inc: {  coinslocked: doc.coinsgive  } }, function(err, user) {
+						if (err) {
+							console.log(err);
+						}
+					});
   Toproom.findOneAndUpdate(
   {
 	  topicname : doc.topicname,

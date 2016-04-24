@@ -22,8 +22,8 @@ controller( 'HomeCtrl', function HomeController( $scope, auth, $http, $location,
                 $scope.data.selectedIndex = Math.max($scope.data.selectedIndex - 1, 0);
              };
 	
-	$scope.serverIp = $scope.serverIp || '104.196.96.128';
-//$scope.serverIp = $scope.serverIp || 'localhost';
+	//$scope.serverIp = $scope.serverIp || '104.196.96.128';
+$scope.serverIp = $scope.serverIp || 'localhost';
 	$scope.user=$scope.user || {};
 	store.set('token', auth.idToken);
 	$scope.bets = $scope.bets || [];
@@ -184,13 +184,18 @@ store.set('token', auth.idToken);
   $scope.admin = function() {
     $location.path('/admin');
   }
-  
-
 
 $scope.populateBets = function() {
 		$scope.bets = [];
 		if($scope.selectedMatch) {
-		var url1 = 'http://'+$scope.serverIp +':3002/api/v1/Toproom'+ '?query={"match_id" : "' +$scope.selectedMatch._id +'","valid":true}';
+			var query = JSON.stringify({
+											create_user_id:{ "$ne": $scope.user.user_id },
+											match_id: $scope.selectedMatch._id,
+											valid : true
+										});
+										
+		var url1 = 'http://'+$scope.serverIp +':3002/api/v1/Toproom'+ '?query= ' + query;
+		console.log(url1);
         $http.get(url1).success(
             function(data, status, headers, config){
                 $scope.bets = data ;// play here
@@ -310,7 +315,7 @@ var data =
        
 		console.log(data);
         $http.post(url, data).success(function(data, status) {
-           $scope.info("You have succesfully created the counter bet You page will refresh shortly");
+           alert("You have succesfully created the counter bet Your page will refresh shortly");
         })
 };
 //$scope.selectedMatch = {};	

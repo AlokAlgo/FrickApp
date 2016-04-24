@@ -72,21 +72,19 @@ newsSchema.post('save', function(doc) {
 			settledbet.save(function(err,setbet) {
 				if (err)
 					console.log(err); 
-				// here the matched 
-				User.findOne({'user_id' : setbet.win_user_id}, function (err, user) {
-					if (err) 	
-					console.log(err);
-					user.coins = user.coins + setbet.coins;
-					user.coinslocked = user.coinslocked - setbet.coins;
-					user.save();
-				});
-				User.findOne({'user_id' : setbet.loose_user_id}, function (err, user) {
-					if (err) 	
-					console.log(err);
-					user.coins = user.coins - setbet.coins;
-					user.coinslocked = user.coinslocked - setbet.coins;
-					user.save();
-				});
+				// Following code has concurrency issue needs to be fixed
+				
+					User.findOneAndUpdate({'user_id' : setbet.win_user_id}, { $inc: { coins : setbet.coins, coinslocked: -setbet.coins  } }, function(err, user) {
+						if (err) {
+							console.log(err);
+						}
+					});
+				
+					User.findOneAndUpdate({'user_id' : setbet.loose_user_id}, { $inc: { coins : -setbet.coins, coinslocked: -setbet.coins  } }, function(err, user) {
+						if (err) {
+							console.log(err);
+						}
+					});
 				
 			}); // end save
 			
